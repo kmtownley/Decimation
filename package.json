@@ -1,0 +1,29 @@
+{
+  "name": "Decimation",
+  "version": "1.0.0",
+  "description": "##Sample JS Project Proposal",
+  "main": "webpack.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "webpack",
+    "webpack": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmtownley/Decimation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmtownley/Decimation/issues"
+  },
+  "homepage": "https://github.com/kmtownley/Decimation#readme"
+}

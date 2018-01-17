@@ -20,7 +20,30 @@ Decimation will allows users to:
 ### Composition and Technology
   The app will be created using the subsequent technologies:
     * browserfy to bundle js files
-    * JavaScript for game logic 
+    * JavaScript for game logic
     * Canvas and HTML5 for rendering
 
-### Implementation deadline
+  The game will rely upon four scripts:
+    * board.js: will handle the logic of the game board and will handle the updating necessary elements, which will cause rerenders.  
+    * fruit.js: will manage the logic of the fruits being displayed on the board. Each fruit object will hold a decimal value and a path.
+    * ninja.js: responsible for user movements and scores.
+    * grid.js: will create a grid system that will hold the value of the fruit while the fruit object passes through it. It will also maintain a answerState(true or false) that will determine wether the user sliced the right fruit.
+
+### Implementation Details
+
+Day 1:
+  * Implement all node modules, including browserfy. Create a simple entry file.
+  * Learn Canvas
+
+Day 2:
+  * Build out the board.js logic and allow the fruit objects to communicate with the board object.
+  * Create the cell.js to connect with the fruit and ninja.js. Ensure each grid object has the ability to toggle between its answerState.
+  * Add the decimal box, which will hold the question value.
+
+Day 3:
+  * Create the ninja.js that will connect to the grid.js.
+  * Implement modular functions that will handle the slice logic of the ninja
+
+Day 4:
+  * Integrate user controls that will allow the player to start, stop and reset the game.
+  * Implement a leader board that will locally store the top ten seed scores

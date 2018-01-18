@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
   debugger
   // game.draw(ctx);
-  game.draw(ctx);
+  game.start(ctx);
 });
 
 
@@ -110,14 +110,15 @@ document.addEventListener("DOMContentLoaded", () => {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Blossom = __webpack_require__(3);
-
+const Blossom = __webpack_require__(2);
+const Background = __webpack_require__(3);
 class Game {
   constructor() {
     this.blossoms = [];
     this.valid = false;
     this.selection = null;
     this.draw = this.draw.bind(this);
+    this.renderBackground = this. renderBackground.bind(this);
     this.xDim = 0;
     this.yDim = 0;
 
@@ -129,53 +130,20 @@ class Game {
 
   }
 
-  // draw(ctx) {
-  //   let newLeaf = new Leaf();
-  //   newLeaf.draw(ctx);
-  //   this.leaves.push(newLeaf);
-  //
-  //   const animationCallback = () => {
-  //
-  //   };
-  // }
+  start(ctx) {
+    this.draw(ctx);
+    this.renderBackground(ctx);
+  }
 
-  // start(canvasEL) {
-  //   const ctx = canvasEl.getContext("2d");
-  //
-  //   const animate = () =>  {
-  //     this.moveBlossoms();
-  //     this.render(ctx);
-  //
-  //     requestAnimationFrame(animate);
-  //   };
-  //
-  //   animate();
-  // }
 
-  // render(ctx) {
-  //   ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-  //
-  //   blossoms.forEach(function (blossom) {
-  //   blossom.render(ctx);
-  //   });
-  // }
+
+
 
   draw(ctx) {
   debugger
-  // let blossom = new Image();
   let dx = 0.5;
   let dy = 0.5;
-
- // ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
-   // ctx.beginPath();
-   // ctx.arc(x, y, 10, 0, Math.PI*2);
-   // ctx.fillStyle = "#ffffff";
-   // blossom.onload = () => {
-   //   ctx.fillRect(0, 0, 1000, 500);
-   //   ctx.drawImage(blossom, this.xDim, this.yDim, 125, 125);
-   // };
-   // blossom.src = './assets/images/whole_blossom.png';
-   let  b = new Blossom(0, 0).draw(ctx, 0, 0);
+  let  b = new Blossom(0, 0).draw(ctx, 0, 0);
 
    ctx.drawImage(b, this.xDim, this.yDim, 125, 125);
    const animateCallback = () => {
@@ -188,63 +156,48 @@ class Game {
       this.xDim = 1;
       this.yDim = 1;
       this.draw(ctx);
-     // window.requestAnimationFrame(animateCallback);
      }
    };
    window.requestAnimationFrame(animateCallback);
 
   }
+
+  renderBackground(ctx) {
+    debugger
+
+    let bg = new Background(0, 500).scrollImage(ctx);
+    // this.img = new Image();
+    // this.img.src = './assets/images/footer_image_tower.png';
+    //
+    // this.img.onload = () => {
+    // let x = 0;
+    // let width = this.img.naturalWidth;
+    // let min = 0-width;
+    // let count = 1;
+    //
+    //   const loop = () => {
+    //     ctx.drawImage(this.img, x, 370);
+    //     ctx.drawImage(this.img, x + width, 370);
+    //     ctx.drawImage(this.img, x + width * 2, 370);
+    //     ctx.drawImage(this.img, x + width * 3, 370);
+    //     x -= count;
+    //     if (x < min) {
+    //       x = 0;
+    //     }
+    //   };
+    //   setInterval(loop, 9);
+    // };
+
+
+    // Background.scrollImage(ctx);
+  }
+
+
+
+
 }
 
-    // move(ctx) {
-    //   let x = 10;
-    //   let y = 10;
-    //   ctx.beginPath();
-    //   ctx.arc(x, y, 10, 0, Math.PI*2);
-    //   ctx.fillStyle = "#0095DD";
-    //   ctx.fill();
-    //   ctx.closePath();
-    //   x += 2;
-    //   y += 2;
-    //   setInterval(this.move, 10);
-    // }
-   // moveBlossoms() {
-   //   this.blossoms.forEach(blossom => {
-   //     Blossom.moveBlossom(Game.DIM_X, Game.DIM_Y);
-   //   });
-   // }
-   // animate() {
-   //  var cx=50;
-   //  var cy=50;
-   //  var radius=40;
-   //
-   //  // a variable to hold the current degree of rotation
-   //  var degreeAngle=0;
-   //  requestAnimationFrame(animate);
-   //
-   //  degreeAngle+=1;
-   //   var radianAngle=degreeAngle*Math.PI/180;
-   //   var x=cx+radius*Math.cos(radianAngle);
-   //   var y=cy+radius*Math.sin(radianAngle);
-   //
-   //   // clear the canvas
-   //   // and draw the image at its new position
-   //   ctx.clearRect(0,0,canvas.width,canvas.height);
-   //   ctx.drawImage(img,x,y);
-   //
-   // }
 
-
-
-  // draw(ctx) {
-  //
-  //   ctx.fillStyle = "#ffffff";
-  //   ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
-  //
-  //   this.leaves.forEach((leaf) => {
-  //     leaf.draw(ctx);
-  //   });
-  // }
 
 
 
@@ -258,8 +211,7 @@ module.exports = Game;
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 BLOSSOM = new Image();
@@ -316,6 +268,46 @@ class Blossom {
 }
 
 module.exports = Blossom;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+class Background {
+  constructor() {
+  }
+
+  scrollImage(ctx) {
+    this.img = new Image();
+    this.img.src = './assets/images/footer_image_tower.png';
+
+    this.img.onload = () => {
+    let x = 0;
+    let width = this.img.naturalWidth;
+    let min = 0 - width;
+    let count = 1;
+
+      const loop = () => {
+  
+        ctx.drawImage(this.img, x, 370);
+        ctx.drawImage(this.img, x + width, 370);
+        ctx.drawImage(this.img, x + width * 2, 370);
+        ctx.drawImage(this.img, x + width * 3, 370);
+        x -= count;
+        if (x < min) {
+          x = 0;
+        }
+      };
+    setInterval(loop, 9);
+    };
+  }
+
+}
+
+
+
+module.exports = Background;
 
 
 /***/ })

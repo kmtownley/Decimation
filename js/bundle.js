@@ -100,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // setInterval(draw, 10);
 
   const game = new Game();
-  debugger
   // game.draw(ctx);
   game.draw(ctx);
 });
@@ -110,7 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Blossom = __webpack_require__(3);
+const Blossom = __webpack_require__(2);
+const Background = __webpack_require__(3);
 
 class Game {
   constructor() {
@@ -162,24 +162,12 @@ class Game {
 
   draw(ctx) {
   debugger
-  // let blossom = new Image();
   let dx = 0.5;
   let dy = 0.5;
-
- // ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
-   // ctx.beginPath();
-   // ctx.arc(x, y, 10, 0, Math.PI*2);
-   // ctx.fillStyle = "#ffffff";
-   // blossom.onload = () => {
-   //   ctx.fillRect(0, 0, 1000, 500);
-   //   ctx.drawImage(blossom, this.xDim, this.yDim, 125, 125);
-   // };
-   // blossom.src = './assets/images/whole_blossom.png';
-   let  b = new Blossom(0, 0).draw(ctx, 0, 0);
+  let  b = new Blossom(0, 0).draw(ctx, 0, 0);
 
    ctx.drawImage(b, this.xDim, this.yDim, 125, 125);
    const animateCallback = () => {
-
    if (this.xDim < 500  && this.yDim < 500) {
      this.xDim += dx;
      this.yDim += dy;
@@ -192,6 +180,9 @@ class Game {
      }
    };
    window.requestAnimationFrame(animateCallback);
+  }
+
+  renderBackground() {
 
   }
 }
@@ -258,47 +249,17 @@ module.exports = Game;
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 BLOSSOM = new Image();
 BLOSSOM.src = "./assets/images/whole_blossom.png";
 
-DEFAULTS = {
-  BLOSSOM: BLOSSOM,
-  POSX: 10,
-  POSY: 10,
-  WIDTH: 125,
-  HEIGHT: 125,
-};
-
-
 
 class Blossom {
   constructor(ctx) {
     debugger
-    // options.blossom = (new Image().src = "./assets/images/whole_blossom.png");
-    // options.height = DEFAULTS.HEIGHT;
-    // options.width = DEFAULTS.WIDTH;
-    // options.posx = options.posx || DEFAULTS.POSX;
-    // options.posy = options.posy || DEFAULTS.POSY;
-    // this.randomBlossom(ctx);
   }
-
-  // randomBlossom(maxX, maxY, numCircles) {
-  //   debugger
-  //   let blossom = new Image();
-  //   blossom.src = "./assets/images/whole_blossom.png";
-  //   return new Blossom(
-  //     blossom.onload = () => {
-  //       // ctx.fillRect(0, 0, 1000, 500);
-  //       ctx.drawImage(blossom, maxX, maxY, 125, 125);
-  //     }
-  //   );
-  //   // return blossom;
-  //
-  //   };
 
 
   draw(ctx, x, y) {
@@ -316,6 +277,30 @@ class Blossom {
 }
 
 module.exports = Blossom;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+class Background {
+
+
+  draw(ctx) {
+    debugger
+    this.background = new Image();
+    this.background.src = './assets/images/footer_image_tower.png';
+    this.background.onload = function() {
+      // ctx.drawImage(blossom, 10, 10, 125, 125);
+       ctx.fillRect(0, 0, 1000, 500);
+
+    };
+    return this.background;
+  }
+}
+
+
+module.exports = Background;
 
 
 /***/ })

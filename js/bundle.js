@@ -68,7 +68,6 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const Blossom = __webpack_require__(2);
-// import Blossom from "./blossom";
 
 const Game = __webpack_require__(1);
 
@@ -76,16 +75,36 @@ document.addEventListener("DOMContentLoaded", () => {
   let canvasEl = document.getElementById("myCanvas");
   canvasEl.width = 1000;
   canvasEl.height = 500;
+  canvasLeft = canvasEl.offsetLeft;
+  canvasTop = canvasEl.offsetTop;
+
 
   let ctx = canvasEl.getContext("2d");
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
+
+
+  canvasEl.onclick = function(e) {
+    // let x = e.clientX;
+    // let y = e.clientY;
+    let x = e.pageX - canvasLeft;
+    let y = e.pageY - canvasTop;
+    console.log(x, y);
+    debugger
+    game.receiveMouseXY(x, y);
+  };
 
   let backgroundEl = document.getElementById("canvasBackground");
   backgroundEl.height = 100;
   backgroundEl.width = 300;
 
   let ctx2 = canvasEl.getContext("2d");
+
+  let explosionEl = document.getElementById("canvasExplosion");
+  explosionEl.height = 128;
+  explosionEl.width = 128;
+
+  let ctx3 = explosionEl.getContext("2d");
 
 
 
@@ -111,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
 
   game.beginBackground(ctx2);
-  game.start(ctx);
+  game.start(ctx, ctx3);
 
   window.Blossom = Blossom;
 
@@ -126,7 +145,7 @@ const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
 
 class Game {
-  constructor() {
+  constructor(ctx, ctx3) {
     this.blossoms = [];
     this.valid = false;
     this.selection = null;
@@ -136,6 +155,7 @@ class Game {
     this.xDim = 0;
     this.yDim = 0;
     this.drawnBlossoms = [];
+    this.ctx3 = ctx3;
 
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
@@ -148,10 +168,11 @@ class Game {
     this.renderBackground(ctx2);
   }
 
-  start(ctx) {
+  start(ctx, ctx3) {
     // this.renderBackground(ctx);
     this.draw(ctx);
-    this.collisionHandler();
+    this.drawSprite(ctx3);
+    // this.collisionHandler();
   }
 
   createBlossoms() {
@@ -164,7 +185,7 @@ class Game {
     return () => {
       if (i == 40) clearInterval(this.interval);
       this.blossoms[i].draw(ctx);
-      debugger
+
       i += 1;
     };
   }
@@ -177,28 +198,108 @@ class Game {
     new Background(0, 500).scrollImage(ctx2);
   }
 
-  findVisibleBlossoms() {
-    debugger
-    this.blossoms.forEach(blossom => {
-      if (blossom.x > 0) {
-        this.visibleBlossoms.push(blossom);
-      }
-    });
-    return this.visibleBlossoms;
-  }
+  // findVisibleBlossoms() {
+  //   debugger
+  //   this.blossoms.forEach(blossom => {
+  //     if (blossom.x > 0) {
+  //       this.visibleBlossoms.push(blossom);
+  //     }
+  //   });
+  //   return this.visibleBlossoms;
+  // }
 
   collisionHandler(blossom, nextBlossom) {
+    this.blossoms.forEach((blossom, idx) => {
+      let nextBlossom = this.blossoms[idx + 1];
+      if (blossom.x > nextBlossom.x) {
+        blossom.x -= 10;
+      }
+    });
+  }
+
+  drawSprite(ctx3) {
     debugger
-    this.findVisibleBlossoms();
-      if (this.visibleBlossoms !== undefined) {
-      this.visibleBlossoms.forEach((blossom, idx) => {
-        let nextBlossom = this.vissibleBlossoms[idx + 1];
-        if (blossom.x > nextBlossom.x) {
-          blossom.x -= 10;
+    this.height = 128;
+    this.width = 128;
+
+    // let sheetWidth = 1024;
+    // let sheetHeight = 640;
+    // let frameWidth = 128;
+    // let frameHeight = 128;
+    // let cols = 8;
+    // let rows = 5;
+    // let srcX;
+    // let srcY;
+    let framesPerRow = 8;
+    let currentFrame = 0;
+    this.explodeImage = new Image();
+    this.explodeImage.src = "./assets/images/explosion_sprite.png";
+
+    this.explodeImage.onload = () => {
+      ctx3.clearRect(0, 0, 128, 128);
+
+      const animateCallback = () => {
+        debugger
+        ctx3.drawImage(this.explodeImage, 0, 128, 128, 128, 0, 0, 128, 128);
+        ctx3.clearRect(0, 0, 128, 128);
+        ctx3.drawImage(this.explodeImage, 128, 128, 128, 128, 0, 0, 128, 128);
+        ctx3.clearRect(0, 0, 128, 128);
+        ctx3.drawImage(this.explodeImage, 256, 128, 128, 128, 0, 0, 128, 128);
+        ctx3.clearRect(0, 0, 128, 128);
+        ctx3.drawImage(this.explodeImage, 384, 128, 128, 128, 0, 0, 128, 128);
+        ctx3.clearRect(0, 0, 128, 128);
+      };
+
+      window.requestAnimationFrame(animateCallback, 2000);
+    };
+
+  }
+
+
+  //   const update = () => {
+  //     currentFrame = (currentFrame + 1 % cols);
+  //
+  //     srcX = currentFrame * 128;
+  //     srcY = 0;
+  //   };
+  //
+  //   const createImage = (context) => {
+  //     debugger
+  //     update();
+  //     context.drawImage(explodeImage, srcX, srcY, 128, 128);
+  //   };
+  //
+  //   setInterval(createImage, 100);
+  // }
+  //
+  // updateSprite() {
+  //     // the current frame to draw
+  //   let counter = 0;       // keep track of frame rate
+  //
+  //     // update to the next frame if it is time
+  //   if (counter == (frameSpeed - 1)) {
+  //       currentFrame = (currentFrame + 1) % endFrame;
+  //
+  //     // update the counter
+  //     counter = (counter + 1) % frameSpeed;
+  //     }
+  // }
+
+  receiveMouseXY(x, y) {
+    debugger
+    if (this.blossoms !== undefined) {
+      this.blossoms.forEach(blossom => {
+        if (x < blossom.x + 100 && x > blossom.x - 100 ) {
+          debugger
+          blossom.messageUser();
         }
       });
     }
   }
+}
+
+
+
 
 
 
@@ -211,11 +312,11 @@ class Game {
 // }
 //   }
 
-}
+
 
 Game.DIM_X = 1000;
 Game.DIM_Y = 500;
-Game.NUM_BLOSSOMS = 20;
+Game.NUM_BLOSSOMS = 30;
 
 
 module.exports = Game;
@@ -270,6 +371,12 @@ class Blossom {
       // ctx.drawImage(blossom, 10, 10, 125, 125);
        ctx.fillRect(0, 0, 1000, 500);
     };
+    // ctx.onclick = () => {
+    //   debugger
+    //   // let mouseX = e.clientX;
+    //   // let mouseY = e.clientY;
+    //   console.log("yay");
+    // };
     // return this.blossom;
     ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
 
@@ -308,7 +415,7 @@ class Blossom {
    }
 
    // findVisibleBlossoms() {
-   //   debugger
+   //
    //
    //   this.drawnBlossoms.forEach(blossom => {
    //     if (blossom.x > 0) {
@@ -319,7 +426,7 @@ class Blossom {
    // }
 
    collisionDetected(blossom, nextBlossom) {
-     debugger
+
      this.findVisibleBlossoms();
        if (this.visibleBlossoms !== undefined) {
        this.visibleBlossoms.forEach((blossom, idx) => {
@@ -344,6 +451,32 @@ class Blossom {
      this.y = Math.abs((this.y + (dy * 25) * 0.1) % 300);
    }
 
+   messageUser() {
+     debugger
+     console.log("You clicked me");
+
+   }
+
+   explodeBlossom() {
+     // let currentFrame = 0;  // the current frame to draw
+     // let counter = 0;
+     // let exlpodeImage = new Image();
+     // let framesPerRow;
+     // this.explodeImage.onload = () => {
+     //   framesPerRow = Math.floor(explodeImage.width / 128);
+     // };
+     //
+     // explodImage.src = "../assets/images/explosion_sprite.png";
+   }
+
+   // updateSprite() {
+   //   if (counter === (frameSpeed - 1))
+   //    currentFrame = (currentFrame + 1) % 1020;
+   //
+   //  // update the counter
+   //  counter = (counter + 1) % frameSpeed;
+   //  }// keep track of frame rate
+   // }
   // draw(ctx) {
   //
   //   let dx = 1.1;

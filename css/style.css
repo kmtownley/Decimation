@@ -67,9 +67,19 @@ main {
   margin-top: 18px;
   border-radius: 44px;
   margin-left: 396px;
+  z-index: -5;
 }
 
 #canvasBackground {
   position: fixed;
   bottom: 0;
+  z-index: 0;
+}
+
+#canvasExplosion {
+  position: relative;
+  margin-top: 18px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 3;
 }

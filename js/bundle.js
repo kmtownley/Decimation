@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let x = e.pageX - canvasLeft;
     let y = e.pageY - canvasTop;
     console.log(x, y);
-    debugger
+
     game.receiveMouseXY(x, y);
   };
 
@@ -199,7 +199,7 @@ class Game {
   }
 
   // findVisibleBlossoms() {
-  //   debugger
+  //
   //   this.blossoms.forEach(blossom => {
   //     if (blossom.x > 0) {
   //       this.visibleBlossoms.push(blossom);
@@ -217,8 +217,37 @@ class Game {
     });
   }
 
-  drawSprite(ctx3) {
+
+
+  animateCallback(ctx3) {
     debugger
+    return () => {
+      ctx3.clearRect(0, 0, 128, 128);
+      // ctx3.drawImage(this.explodeImage, this.explodeImage.startPos, 128, 128, 128, 0, 0, 128, 128);
+      //
+      // this.explodeImage.startPos += 128;
+      // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+      ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
+
+      this.explodeImage.startPosX += 128;
+
+      if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
+        this.explodeImage.startPosX = 0;
+        this.explodeImage.startPosY += 128;
+        this.explodeImage.count += 1;
+
+      }
+      window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+    };
+  }
+
+  animate(ctx3) {
+    debugger
+    window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+  }
+
+  drawSprite(ctx3) {
+
     this.height = 128;
     this.width = 128;
 
@@ -234,26 +263,41 @@ class Game {
     let currentFrame = 0;
     this.explodeImage = new Image();
     this.explodeImage.src = "./assets/images/explosion_sprite.png";
+    this.explodeImage.startPosX = 0;
+    this.explodeImage.startPosY = 0;
+    this.explodeImage.count = 0;
 
     this.explodeImage.onload = () => {
       ctx3.clearRect(0, 0, 128, 128);
+      this.animate(ctx3);
 
-      const animateCallback = () => {
-        debugger
-        ctx3.drawImage(this.explodeImage, 0, 128, 128, 128, 0, 0, 128, 128);
-        ctx3.clearRect(0, 0, 128, 128);
-        ctx3.drawImage(this.explodeImage, 128, 128, 128, 128, 0, 0, 128, 128);
-        ctx3.clearRect(0, 0, 128, 128);
-        ctx3.drawImage(this.explodeImage, 256, 128, 128, 128, 0, 0, 128, 128);
-        ctx3.clearRect(0, 0, 128, 128);
-        ctx3.drawImage(this.explodeImage, 384, 128, 128, 128, 0, 0, 128, 128);
-        ctx3.clearRect(0, 0, 128, 128);
+      // const animateCallback = () => {
+      //   ctx3.clearRect(0, 0, 128, 128);
+      //   debugger
+      //   ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
+      //
+      //   this.explodeImage.startPosX += 128;
+      //
+      //   if (this.explodeImage.startPosX >= 1024 & count <= 4) {
+      //     this.explodeImage.startPosX = 0;
+      //     this.explodeImage.startPosY += 128;
+      //     count += 1;
+      //   }
+      //
+      //   window.requestAnimationFrame(animateCallback);
+        //
+        // ctx3.drawImage(this.explodeImage, 128, 128, 128, 128, 0, 0, 128, 128);
+        // ctx3.clearRect(0, 0, 128, 128);
+        // ctx3.drawImage(this.explodeImage, 256, 128, 128, 128, 0, 0, 128, 128);
+        // ctx3.clearRect(0, 0, 128, 128);
+        // ctx3.drawImage(this.explodeImage, 384, 128, 128, 128, 0, 0, 128, 128);
+        // ctx3.clearRect(0, 0, 128, 128);
       };
 
-      window.requestAnimationFrame(animateCallback, 2000);
-    };
+      // window.requestAnimationFrame(animateCallback);
+    }
 
-  }
+  // }
 
 
   //   const update = () => {
@@ -264,7 +308,7 @@ class Game {
   //   };
   //
   //   const createImage = (context) => {
-  //     debugger
+  //
   //     update();
   //     context.drawImage(explodeImage, srcX, srcY, 128, 128);
   //   };
@@ -286,11 +330,11 @@ class Game {
   // }
 
   receiveMouseXY(x, y) {
-    debugger
+
     if (this.blossoms !== undefined) {
       this.blossoms.forEach(blossom => {
         if (x < blossom.x + 100 && x > blossom.x - 100 ) {
-          debugger
+
           blossom.messageUser();
         }
       });
@@ -372,7 +416,7 @@ class Blossom {
        ctx.fillRect(0, 0, 1000, 500);
     };
     // ctx.onclick = () => {
-    //   debugger
+    //
     //   // let mouseX = e.clientX;
     //   // let mouseY = e.clientY;
     //   console.log("yay");
@@ -452,7 +496,7 @@ class Blossom {
    }
 
    messageUser() {
-     debugger
+
      console.log("You clicked me");
 
    }

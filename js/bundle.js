@@ -67,6 +67,9 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const Blossom = __webpack_require__(2);
+// import Blossom from "./blossom";
+
 const Game = __webpack_require__(1);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -78,175 +81,48 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
-  // let ctx2 = canvasEl2.getContent("2d");
+  let backgroundEl = document.getElementById("canvasBackground");
+  backgroundEl.height = 100;
+  backgroundEl.width = 300;
+
+  let ctx2 = canvasEl.getContext("2d");
 
 
 
-  // var x = canvasEl.width/2;
-  // var y = canvasEl.height-30;
-  // var dx = 2;
-  // var dy = -2;
-  // function draw() {
-  //   // drawing code
-  //   ctx.beginPath();
-  //   ctx.rect(x, y, 50, 50);
-  //   ctx.fillStyle = "#FF0000";
-  //   ctx.fill();
-  //   ctx.closePath();
-  //   x += dx;
-  //   y += dy;
+  // canvasEl.addEventListener('click', () => {
+  //  console.log('canvas click');
+  // });
+  // let canvasPosition = {
+  //   x: canvasEl.offset().left,
+  //   y: canvasEl.offset().top
+  // };
   //
-  // }
-  // setInterval(draw, 10);
+  // canvasEl.on('click', function(e) {
+  //
+  //   // use pageX and pageY to get the mouse position
+  //   // relative to the browser window
+  //
+  //   var mouse = {
+  //       x: e.pageX - canvasPosition.x,
+  //       y: e.pageY - canvasPosition.y
+  //   };
+  // });
 
   const game = new Game();
-  // game.draw(ctx);
-  game.draw(ctx);
+
+  game.beginBackground(ctx2);
+  game.start(ctx);
+
+  window.Blossom = Blossom;
+
 });
 
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-const Blossom = __webpack_require__(2);
-const Background = __webpack_require__(3);
-
-class Game {
-  constructor() {
-    this.blossoms = [];
-    this.valid = false;
-    this.selection = null;
-    this.draw = this.draw.bind(this);
-    this.xDim = 0;
-    this.yDim = 0;
-
-    // for (let i = 0; i < Game.NUM_BLOSSOMS; ++i) {
-    // blossoms.push(
-    //   Blossom.randomBlossom(Game.DIM_X, Game.DIM_Y, Game.NUM_BLOSSOMS)
-    // );
-  // }
-
-  }
-
-  // draw(ctx) {
-  //   let newLeaf = new Leaf();
-  //   newLeaf.draw(ctx);
-  //   this.leaves.push(newLeaf);
-  //
-  //   const animationCallback = () => {
-  //
-  //   };
-  // }
-
-  // start(canvasEL) {
-  //   const ctx = canvasEl.getContext("2d");
-  //
-  //   const animate = () =>  {
-  //     this.moveBlossoms();
-  //     this.render(ctx);
-  //
-  //     requestAnimationFrame(animate);
-  //   };
-  //
-  //   animate();
-  // }
-
-  // render(ctx) {
-  //   ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-  //
-  //   blossoms.forEach(function (blossom) {
-  //   blossom.render(ctx);
-  //   });
-  // }
-
-  draw(ctx) {
-  debugger
-  let dx = 0.5;
-  let dy = 0.5;
-  let  b = new Blossom(0, 0).draw(ctx, 0, 0);
-
-   ctx.drawImage(b, this.xDim, this.yDim, 125, 125);
-   const animateCallback = () => {
-   if (this.xDim < 500  && this.yDim < 500) {
-     this.xDim += dx;
-     this.yDim += dy;
-     this.draw(ctx);
-     } else {
-      this.xDim = 1;
-      this.yDim = 1;
-      this.draw(ctx);
-     // window.requestAnimationFrame(animateCallback);
-     }
-   };
-   window.requestAnimationFrame(animateCallback);
-  }
-
-  renderBackground() {
-
-  }
-}
-
-    // move(ctx) {
-    //   let x = 10;
-    //   let y = 10;
-    //   ctx.beginPath();
-    //   ctx.arc(x, y, 10, 0, Math.PI*2);
-    //   ctx.fillStyle = "#0095DD";
-    //   ctx.fill();
-    //   ctx.closePath();
-    //   x += 2;
-    //   y += 2;
-    //   setInterval(this.move, 10);
-    // }
-   // moveBlossoms() {
-   //   this.blossoms.forEach(blossom => {
-   //     Blossom.moveBlossom(Game.DIM_X, Game.DIM_Y);
-   //   });
-   // }
-   // animate() {
-   //  var cx=50;
-   //  var cy=50;
-   //  var radius=40;
-   //
-   //  // a variable to hold the current degree of rotation
-   //  var degreeAngle=0;
-   //  requestAnimationFrame(animate);
-   //
-   //  degreeAngle+=1;
-   //   var radianAngle=degreeAngle*Math.PI/180;
-   //   var x=cx+radius*Math.cos(radianAngle);
-   //   var y=cy+radius*Math.sin(radianAngle);
-   //
-   //   // clear the canvas
-   //   // and draw the image at its new position
-   //   ctx.clearRect(0,0,canvas.width,canvas.height);
-   //   ctx.drawImage(img,x,y);
-   //
-   // }
-
-
-
-  // draw(ctx) {
-  //
-  //   ctx.fillStyle = "#ffffff";
-  //   ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
-  //
-  //   this.leaves.forEach((leaf) => {
-  //     leaf.draw(ctx);
-  //   });
-  // }
-
-
-
-
-Game.DIM_X = 1000;
-Game.DIM_Y = 500;
-Game.NUM_BLOSSOMS = 4;
-
-
-module.exports = Game;
-
+throw new Error("Module parse failed: Unexpected token (71:21)\nYou may need an appropriate loader to handle this file type.\n| //   }\n| \n|   renderBackground() {\n| \n|     this.interval = setInterval(this.drawBlossoms(ctx).bind(this), 3000);");
 
 /***/ }),
 /* 2 */
@@ -257,50 +133,205 @@ BLOSSOM.src = "./assets/images/whole_blossom.png";
 
 
 class Blossom {
-  constructor(ctx) {
-    debugger
+  constructor(x, y) {
+    this.x = x;
+    this.y = Math.random() * 400 + 6;
+    this.drawnBlossoms = [];
+    this.visibleBlossoms = [];
+    this.height = 125;
+    this.width = 125;
+
+    // this.isOutOfBounds = this.isOutOfBounds.bind(this)
   }
+  //
+  // model() {
+  //   this.rot += 0.1 * this.direc;
+  //   this.x += this.xVec;
+  //   this.yVec += this.gravity;
+  //   this.y += this.yVec;
+  //   this.bounceIf();
+  // }
+  //
+  // bounceIf() {
+  //   if (this.y >= this.bottom || this.y <= this.top) {
+  //     this.y = this.bottom;
+  //     this.yVec = -1 * this.yVec;
+  //   }
+  //
+  // }
 
 
-  draw(ctx, x, y) {
+
+
+  draw(ctx) {
+    let increments = [1, 2];
+    let dx = 1.1;
+    let dy = 0.9;
     this.blossom = new Image();
     this.blossom.src = './assets/images/whole_blossom.png';
     this.blossom.onload = function() {
       // ctx.drawImage(blossom, 10, 10, 125, 125);
        ctx.fillRect(0, 0, 1000, 500);
-
     };
-    return this.blossom;
-  }
+    // return this.blossom;
+    ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+
+    const animateCallback = () => {
+    if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
+      this.x += dx;
+      this.y += dy;
+      // if (this.collisionDetected()) {
+      //   this.x -= 50;
+      // }
+      this.draw(ctx);
+    } else if (this.x < 450) {
+       this.x += dx;
+       this.y -= dy;
+       // if (this.collisionDetected()) {
+       //   this.x -= 50;
+       // }
+       this.draw(ctx);
+     } else if (this.x < 730) {
+       this.x += dx;
+       this.y += dy;
+       // if (this.collisionDetected()) {
+       //   this.x -= 50;
+       // }
+       this.draw(ctx);
+     } else if (this.x <= 999) {
+       this.x += dx;
+       this.y -= dy;
+       this.draw(ctx);
+     } else {
+       return null;
+     }
+    };
+    window.requestAnimationFrame(animateCallback);
+
+   }
+
+   // findVisibleBlossoms() {
+   //   debugger
+   //
+   //   this.drawnBlossoms.forEach(blossom => {
+   //     if (blossom.x > 0) {
+   //       this.visibleBlossoms.push(blossom);
+   //     }
+   //   });
+   //   return this.visibleBlossoms;
+   // }
+
+   collisionDetected(blossom, nextBlossom) {
+     debugger
+     this.findVisibleBlossoms();
+       if (this.visibleBlossoms !== undefined) {
+       this.visibleBlossoms.forEach((blossom, idx) => {
+         let nextBlossom = this.vissibleBlossoms[idx + 1];
+         if (blossom.x > nextBlossom.x) {
+           return true;
+         }
+
+       });
+     }
+
+     // return !(
+     // (this.x + this.height) < otherBlossom.y ||
+     //    (this.y > (otherBlossom.y + otherBlossom.height)) ||
+     //   ((this.x + this.width) < otherBlossom.x) ||
+     //   (this.x > (otherBlosom.x + otherBlossom.width))
+     // );
+   }
+
+   moveRandom(maxY) {
+     let dy = (Math.random() * 2) - 1;
+     this.y = Math.abs((this.y + (dy * 25) * 0.1) % 300);
+   }
+
+  // draw(ctx) {
+  //
+  //   let dx = 1.1;
+  //   // let dy;
+  //   if (this.dy === null) {
+  //     this.dy = (Math.random() * 4) - 1;
+  //   }
+  //
+  //   this.blossom = new Image();
+  //   this.blossom.src = './assets/images/whole_blossom.png';
+  //   this.blossom.onload = function() {
+  //     // ctx.drawImage(blossom, 10, 10, 125, 125);
+  //      ctx.fillRect(0, 0, 1000, 500);
+  //   };
+  //   // return this.blossom;
+  //   ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+  //   const animateCallback = () => {
+  //     for (let i = 1; i < 20; i++) {
+  //       if (i === 1 && (this.y <= 150 && this.y > 0)) {
+  //         this.x += dx;
+  //         this.y += this.dy;
+  //         this.draw(ctx);
+  //       } else if ( i === 1 && (this.y >150 && this.y < 300)) {
+  //         this.x +=dx;
+  //         this.y -= this.dy;
+  //         this.draw(ctx);
+  //       } else if (this.isOutOfBounds(this.y) && this.x < 1000) {
+  //
+  //         this.reverseDy(this.dy);
+  //         this.x += dx;
+  //         this.y += this.dy;
+  //         this.draw(ctx);
+  //       } else if (this.x < 1000) {
+  //
+  //         this.x += dx;
+  //         this.y += this.dy;
+  //         this.draw(ctx);
+  //       } else {
+  //         this.x = 1;
+  //         this.y = Math.random() * 70 + 10;
+  //         this.draw(ctx);
+  //       }
+  //
+  //        }
+  //     };
+  //     window.requestAnimationFrame(animateCallback);
+  //   }
+
+
+   // reverseDy(dy) {
+   //   return (
+   //   this.dy = dy * -1
+   //   );
+   // }
+   //
+   // isOutOfBounds(y) {
+   //   if (y > 300 || y < 1 ) {
+   //     return true;
+   //   } else {
+   //     return false;
+   //   }
+   // }
+
+   // moveUp() {
+   //   if {this.starty < }
+   // }
+
 
 
 }
+
+Blossom.randomBlossom = (maxX, maxY, numBlossoms) => {
+
+  let blossom = new Image();
+  blossom.src = "./assets/images/whole_blossom.png";
+
+  return new Blossom(
+    maxX * Math.random(),
+    maxY * Math.random(),
+    numBlossoms += 1
+  );
+};
+
 
 module.exports = Blossom;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-class Background {
-
-
-  draw(ctx) {
-    debugger
-    this.background = new Image();
-    this.background.src = './assets/images/footer_image_tower.png';
-    this.background.onload = function() {
-      // ctx.drawImage(blossom, 10, 10, 125, 125);
-       ctx.fillRect(0, 0, 1000, 500);
-
-    };
-    return this.background;
-  }
-}
-
-
-module.exports = Background;
 
 
 /***/ })

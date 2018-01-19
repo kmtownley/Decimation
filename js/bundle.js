@@ -170,32 +170,8 @@ class Game {
   }
 
   draw(ctx) {
-  debugger
-  let dx = 0.5;
-  let dy = 0.5;
-  let  b = new Blossom(0, 0).draw(ctx, 0, 0);
-
-   ctx.drawImage(b, this.xDim, this.yDim, 125, 125);
-   const animateCallback = () => {
-   if (this.xDim < 500  && this.yDim < 500) {
-     this.xDim += dx;
-     this.yDim += dy;
-     this.draw(ctx);
-     } else {
-      this.xDim = 1;
-      this.yDim = 1;
-      this.draw(ctx);
-     // window.requestAnimationFrame(animateCallback);
-     }
-   };
-   window.requestAnimationFrame(animateCallback);
-  }
-
-  renderBackground() {
-
     this.interval = setInterval(this.drawBlossoms(ctx).bind(this), 3000);
   }
-
 
   renderBackground(ctx2) {
     new Background(0, 500).scrollImage(ctx2);

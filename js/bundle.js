@@ -81,7 +81,35 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
+  let backgroundEl = document.getElementById("canvasBackground");
+  backgroundEl.height = 100;
+  backgroundEl.width = 300;
+
+  let ctx2 = canvasEl.getContext("2d");
+
+
+
+  // canvasEl.addEventListener('click', () => {
+  //  console.log('canvas click');
+  // });
+  // let canvasPosition = {
+  //   x: canvasEl.offset().left,
+  //   y: canvasEl.offset().top
+  // };
+  //
+  // canvasEl.on('click', function(e) {
+  //
+  //   // use pageX and pageY to get the mouse position
+  //   // relative to the browser window
+  //
+  //   var mouse = {
+  //       x: e.pageX - canvasPosition.x,
+  //       y: e.pageY - canvasPosition.y
+  //   };
+  // });
+
   const game = new Game();
+  game.beginBackground(ctx2);
   game.start(ctx);
 
   window.Blossom = Blossom;
@@ -95,9 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
 
-
-
-
 class Game {
   constructor() {
     this.blossoms = [];
@@ -108,6 +133,7 @@ class Game {
     this.createBlossoms = this.createBlossoms.bind(this);
     this.xDim = 0;
     this.yDim = 0;
+    this.drawnBlossoms = [];
 
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
@@ -116,15 +142,19 @@ class Game {
     }
   }
 
+  beginBackground(ctx2) {
+    this.renderBackground(ctx2);
+  }
+
   start(ctx) {
-    this.renderBackground(ctx);
+    // this.renderBackground(ctx);
     this.draw(ctx);
+    this.collisionHandler();
   }
 
   createBlossoms() {
     return Blossom.randomBlossom(0, Game.DIM_Y, Game.NUM_BLOSSOMS);
   }
-
 
   drawBlossoms(ctx) {
     let i = 0;
@@ -132,47 +162,52 @@ class Game {
     return () => {
       if (i == 40) clearInterval(this.interval);
       this.blossoms[i].draw(ctx);
+      debugger
       i += 1;
     };
   }
 
-
-
-
-
   draw(ctx) {
-  // let  b = new Blossom(0, 0).draw(ctx, 0, 0);
-  // new Blossom(0, 0).draw(ctx);
-    this.interval = setInterval(this.drawBlossoms(ctx).bind(this), 5000);
-  // this.blossoms.forEach(blossom => {
-  //   setTimeout(function() { blossom.draw(ctx)}, 1000);
-  //   blossom.draw(ctx);
-  // });
-   // ctx.drawImage(b, this.xDim, this.yDim, 125, 125);
-   // const animateCallback = () => {
-   //
-   // if (this.xDim < 500  && this.yDim < 300) {
-   //
-   //   this.xDim += dx;
-   //   this.yDim += dy;
-   //   this.draw(ctx);
-   //   } else {
-   //
-   //    this.xDim = 1;
-   //    this.yDim = 1;
-   //    this.draw(ctx);
-   //   }
-   // };
-   // window.requestAnimationFrame(animateCallback);
-
+    this.interval = setInterval(this.drawBlossoms(ctx).bind(this), 3000);
   }
 
-  renderBackground(ctx) {
-    new Background(0, 500).scrollImage(ctx);
+  renderBackground(ctx2) {
+    new Background(0, 500).scrollImage(ctx2);
+  }
+
+  findVisibleBlossoms() {
+    debugger
+    this.blossoms.forEach(blossom => {
+      if (blossom.x > 0) {
+        this.visibleBlossoms.push(blossom);
+      }
+    });
+    return this.visibleBlossoms;
+  }
+
+  collisionHandler(blossom, nextBlossom) {
+    debugger
+    this.findVisibleBlossoms();
+      if (this.visibleBlossoms !== undefined) {
+      this.visibleBlossoms.forEach((blossom, idx) => {
+        let nextBlossom = this.vissibleBlossoms[idx + 1];
+        if (blossom.x > nextBlossom.x) {
+          blossom.x -= 10;
+        }
+      });
+    }
   }
 
 
 
+//   collisionDetection() {
+//     if (rect1.x < rect2.x + rect2.width &&
+//    rect1.x + rect1.width > rect2.x &&
+//    rect1.y < rect2.y + rect2.height &&
+//    rect1.height + rect1.y > rect2.y) {
+//     // collision detected!
+// }
+//   }
 
 }
 
@@ -205,6 +240,10 @@ class Blossom {
   constructor(x, y) {
     this.x = x;
     this.y = Math.random() * 400 + 6;
+    this.drawnBlossoms = [];
+    this.visibleBlossoms = [];
+    this.height = 125;
+    this.width = 125;
 
     // this.isOutOfBounds = this.isOutOfBounds.bind(this)
   }
@@ -239,29 +278,71 @@ class Blossom {
     };
     // return this.blossom;
     ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+
     const animateCallback = () => {
     if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
       this.x += dx;
       this.y += dy;
+      // if (this.collisionDetected()) {
+      //   this.x -= 50;
+      // }
       this.draw(ctx);
     } else if (this.x < 450) {
        this.x += dx;
        this.y -= dy;
+       // if (this.collisionDetected()) {
+       //   this.x -= 50;
+       // }
        this.draw(ctx);
      } else if (this.x < 730) {
        this.x += dx;
        this.y += dy;
+       // if (this.collisionDetected()) {
+       //   this.x -= 50;
+       // }
        this.draw(ctx);
      } else if (this.x <= 999) {
        this.x += dx;
        this.y -= dy;
        this.draw(ctx);
      } else {
-       null
+       return null;
      }
     };
     window.requestAnimationFrame(animateCallback);
 
+   }
+
+   // findVisibleBlossoms() {
+   //   debugger
+   //
+   //   this.drawnBlossoms.forEach(blossom => {
+   //     if (blossom.x > 0) {
+   //       this.visibleBlossoms.push(blossom);
+   //     }
+   //   });
+   //   return this.visibleBlossoms;
+   // }
+
+   collisionDetected(blossom, nextBlossom) {
+     debugger
+     this.findVisibleBlossoms();
+       if (this.visibleBlossoms !== undefined) {
+       this.visibleBlossoms.forEach((blossom, idx) => {
+         let nextBlossom = this.vissibleBlossoms[idx + 1];
+         if (blossom.x > nextBlossom.x) {
+           return true;
+         }
+
+       });
+     }
+
+     // return !(
+     // (this.x + this.height) < otherBlossom.y ||
+     //    (this.y > (otherBlossom.y + otherBlossom.height)) ||
+     //   ((this.x + this.width) < otherBlossom.x) ||
+     //   (this.x > (otherBlosom.x + otherBlossom.width))
+     // );
    }
 
    moveRandom(maxY) {
@@ -270,7 +351,7 @@ class Blossom {
    }
 
   // draw(ctx) {
-  //   debugger
+  //
   //   let dx = 1.1;
   //   // let dy;
   //   if (this.dy === null) {
@@ -296,13 +377,13 @@ class Blossom {
   //         this.y -= this.dy;
   //         this.draw(ctx);
   //       } else if (this.isOutOfBounds(this.y) && this.x < 1000) {
-  //         debugger
+  //
   //         this.reverseDy(this.dy);
   //         this.x += dx;
   //         this.y += this.dy;
   //         this.draw(ctx);
   //       } else if (this.x < 1000) {
-  //         debugger
+  //
   //         this.x += dx;
   //         this.y += this.dy;
   //         this.draw(ctx);
@@ -347,7 +428,8 @@ Blossom.randomBlossom = (maxX, maxY, numBlossoms) => {
 
   return new Blossom(
     maxX * Math.random(),
-    maxY * Math.random()
+    maxY * Math.random(),
+    numBlossoms += 1
   );
 };
 
@@ -363,7 +445,7 @@ class Background {
   constructor() {
   }
 
-  scrollImage(ctx) {
+  scrollImage(ctx2) {
     this.img = new Image();
     this.img.src = './assets/images/footer_image_tower.png';
 
@@ -374,10 +456,11 @@ class Background {
     let count = 1;
 
       const loop = () => {
-        ctx.drawImage(this.img, x, 370);
-        ctx.drawImage(this.img, x + width, 370);
-        ctx.drawImage(this.img, x + width * 2, 370);
-        ctx.drawImage(this.img, x + width * 3, 370);
+        ctx2.fillRect(0, 0, 1000, 500);
+        ctx2.drawImage(this.img, x, 370);
+        ctx2.drawImage(this.img, x + width, 370);
+        ctx2.drawImage(this.img, x + width * 2, 370);
+        ctx2.drawImage(this.img, x + width * 3, 370);
         x -= count;
         if (x < min) {
           x = 0;

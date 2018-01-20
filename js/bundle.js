@@ -162,13 +162,10 @@ class Game {
   constructor(ctx, ctx2, ctx3, ctxWords) {
     this.blossoms = [];
     this.valid = false;
-    this.blossomExploded = false;
     this.selection = null;
     this.draw = this.draw.bind(this);
-    this.drawSprite = this.drawSprite.bind(this);
-    // this.renderBackground = this.renderBackground.bind(this);
+    this.renderBackground = this. renderBackground.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
-    this.gameLoop = this.gameLoop.bind(this);
     this.xDim = 0;
     this.yDim = 0;
     this.ctx3 = ctx3;
@@ -176,66 +173,28 @@ class Game {
     //
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
-        this.createBlossoms(this.ctx)
+        this.createBlossoms()
       );
     }
   }
 
-  gameLoop() {
-    this.currentTime = (new Date()).getTime();
-    this.delta = (this.currentTime - this.lastTime) / 1000;
-    this.ctx.clearRect(0, 0, 1000, 500);
-    // this.draw(ctx);
-    // this.renderBackground(this.ctx2);
-    this.drawSprite();
-    this.background.scrollImage();
-    this.draw();
-    window.requestAnimationFrame(this.gameLoop);
-
-}
-
+  beginBackground(ctx2) {
+    this.renderBackground(ctx2);
+  }
 
   start(ctx, ctx3) {
     this.draw(ctx);
     this.drawSprite(ctx3);
     Word.prototype.renderWord();
   }
-  // function update(progress) {
-  // // Update the state of the world for the elapsed time since last render
-  // }
-  //
-  // function draw() {
-  //   // Draw the state of the world
-  // }
-  //
-  // function loop(timestamp) {
-  //   var progress = timestamp - lastRender
-  //
-  //   update(progress)
-  //   draw()
-  //
-  //   lastRender = timestamp
-  //   window.requestAnimationFrame(loop)
-  // }
-  // var lastRender = 0
-  // window.requestAnimationFrame(loop)
-
-  beginBackground(ctx2) {
-    this.renderBackground(ctx2);
-  }
-
-  // start(ctx, ctx3) {
-  //   // this.renderBackground(ctx);
-  //   // this.drawSprite(ctx3)
-  //   this.draw(ctx);
-  // }
 
   createBlossoms() {
     return Blossom.randomBlossom(0, Game.DIM_Y, Game.NUM_BLOSSOMS, this.ctx3, this.ctx);
   }
 
-  drawBlossoms() {
+  drawBlossoms(ctx) {
     let i = 0;
+
     return () => {
       if (i == 40) clearInterval(this.interval);
       this.blossoms[i].draw(ctx);
@@ -247,6 +206,9 @@ class Game {
     this.interval = setInterval(this.drawBlossoms(this.ctx).bind(this), 3000);
   }
 
+  renderBackground(ctx2) {
+    new Background(0, 500).scrollImage(ctx2);
+  }
 
   collisionHandler(blossom, nextBlossom) {
     this.blossoms.forEach((blossom, idx) => {
@@ -263,12 +225,12 @@ class Game {
       ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
       this.explodeImage.startPosX += 128;
 
-      if (this.explodeImage.startPosX >= 1024 && this.explodeImage.count <= 4) {
+      if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
         this.explodeImage.startPosX = 0;
         this.explodeImage.startPosY += 128;
         this.explodeImage.count += 1;
       }
-      window.requestAnimationFrame(this.animateCallback().bind(this));
+      window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
     };
   }
 
@@ -290,7 +252,6 @@ class Game {
     }
 
   receiveMouseXY(x, y) {
-
     if (this.blossoms !== undefined) {
       this.blossoms.forEach((blossom, idx) => {
 

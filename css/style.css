@@ -151,8 +151,12 @@ main {
 
 #canvasBackground {
   position: absolute;
-  bottom: 0;
-  z-index: 0;
+  margin-top: 18px;
+  width: 1000px;
+  height: 500px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: -3;
 }
 
 
@@ -165,6 +169,16 @@ main {
   border-radius: 44px;
   margin-left: 396px;
   z-index: 3;
+}
+
+#canvasWords {
+  position: absolute;
+  margin-top: 18px;
+  width: 1000px;
+  height: 500px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 10;
 }
 
 .clicky {

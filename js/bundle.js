@@ -84,11 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
 
+  let canvasWords = document.getElementById("canvasWords");
+  canvasWords.width = 80;
+  canvasWords.height = 80;
+  let ctxWords = document.getElementById("canvasWords");
 
   let clickyEl = document.querySelector(".clicky");
-
-
-
   clickyEl.addEventListener("click", (e) => {
     let x = e.pageX - canvasLeft;
     let y = e.pageY - canvasTop;
@@ -104,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //
   //   game.receiveMouseXY(x, y);
   // };
+
 
   let backgroundEl = document.getElementById("canvasBackground");
   backgroundEl.height = 100;
@@ -138,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //   };
   // });
 
-  const game = new Game(ctx, ctx2, ctx3);
+  const game = new Game(ctx, ctx2, ctx3, ctxWords);
 
   game.beginBackground(ctx2);
   game.start(ctx, ctx3);
@@ -154,9 +156,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
+const Word = __webpack_require__(5);
 
 class Game {
-  constructor(ctx, ctx2, ctx3) {
+  constructor(ctx, ctx2, ctx3, ctxWords) {
     this.blossoms = [];
     this.valid = false;
     this.selection = null;
@@ -165,13 +168,14 @@ class Game {
     this.createBlossoms = this.createBlossoms.bind(this);
     this.xDim = 0;
     this.yDim = 0;
-    this.drawnBlossoms = [];
+    // this.drawnBlossoms = [];
     this.ctx3 = ctx3;
-
+    //
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
         this.createBlossoms()
       );
+      // this.createBlossoms();
     }
   }
 
@@ -182,7 +186,8 @@ class Game {
   start(ctx, ctx3) {
     // this.renderBackground(ctx);
     this.draw(ctx);
-    // this.drawSprite(ctx3);
+    this.drawSprite(ctx3);
+    Word.prototype.renderWord();
     // this.collisionHandler();
   }
 
@@ -231,7 +236,7 @@ class Game {
 
 
   animateCallback(ctx3) {
-    debugger
+
     return () => {
       ctx3.clearRect(0, 0, 128, 128);
       // ctx3.drawImage(this.explodeImage, this.explodeImage.startPos, 128, 128, 128, 0, 0, 128, 128);
@@ -253,7 +258,7 @@ class Game {
   }
 
   animate(ctx3) {
-    debugger
+
     window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
   }
 
@@ -284,7 +289,7 @@ class Game {
 
       // const animateCallback = () => {
       //   ctx3.clearRect(0, 0, 128, 128);
-      //   debugger
+      //
       //   ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
       //
       //   this.explodeImage.startPosX += 128;
@@ -343,16 +348,16 @@ class Game {
   receiveMouseXY(x, y) {
     // console.log(x, y)
     if (this.blossoms !== undefined) {
-      this.blossoms.forEach(blossom => {
-        // debugger
+      this.blossoms.forEach((blossom, idx) => {
+        //
         // console.log(blossom)
         if ((x < blossom.x + 100 && x > blossom.x) && (y > blossom.y + 100 && y < blossom.y + 208 ) && blossom.x !== 0) {
-          console.log("GOT IN")
-          this.blossomExploded = true;
-          debugger
-          // delete this.blossoms[blossom];
+          blossom.blossomExploded = true;
+          blossom.removeBlossom();
+          if (idx !== -1) {
+              this.blossoms.splice(idx, 1);
+          }
           blossom.explodeBlossom(this.ctx3);
-          // this.drawSprite();
         }
       });
     }
@@ -401,6 +406,7 @@ class Blossom {
     this.height = 125;
     this.width = 125;
     this.ctx3 = ctx3;
+    this.blossomExploded = false;
 
     // this.isOutOfBounds = this.isOutOfBounds.bind(this)
   }
@@ -432,8 +438,16 @@ class Blossom {
     this.blossom.src = './assets/images/whole_blossom.png';
     this.blossom.onload = function() {
       // ctx.drawImage(blossom, 10, 10, 125, 125);
-       ctx.fillRect(0, 0, 1000, 500);
+       // ctx.fillRect(0, 0, 1000, 500);
     };
+    if (this.blossomExlpoded === true) {
+      debugger
+      this.blossom = ctx.createImageData(128, 128);
+        for (let i = this.blossom.data.length; --i >= 0; )
+          this.blossom.data[i] = 0;
+          ctx.putImageData(this.blossom, this.x, this.y);
+      }
+
     // ctx.onclick = () => {
     //
     //   // let mouseX = e.clientX;
@@ -444,34 +458,46 @@ class Blossom {
     ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
 
     const animateCallback = () => {
-    if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
-      this.x += dx;
-      this.y += dy;
-      // if (this.collisionDetected()) {
-      //   this.x -= 50;
-      // }
-      this.draw(ctx);
-    } else if (this.x < 450) {
-       this.x += dx;
-       this.y -= dy;
-       // if (this.collisionDetected()) {
-       //   this.x -= 50;
-       // }
-       this.draw(ctx);
-     } else if (this.x < 730) {
-       this.x += dx;
-       this.y += dy;
-       // if (this.collisionDetected()) {
-       //   this.x -= 50;
-       // }
-       this.draw(ctx);
-     } else if (this.x <= 999) {
-       this.x += dx;
-       this.y -= dy;
-       this.draw(ctx);
-     } else {
-       return null;
-     }
+      if (this.explodedBlossom !== true) {
+        if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
+          this.x += dx;
+          this.y += dy;
+          // if (this.collisionDetected()) {
+          //   this.x -= 50;
+          // }
+          if (this.blossomExploded === true) {
+            debugger
+            this.blossom = ctx.createImageData(128, 128);
+              for (let i = this.blossom.data.length; --i >= 0; )
+                this.blossom.data[i] = 0;
+                ctx.putImageData(this.blossom, this.x, this.y);
+            } else {
+            this.draw(ctx);
+          }
+        } else if (this.x < 400) {
+          debugger
+           this.x += dx;
+           this.y -= dy;
+           // if (this.collisionDetected()) {
+           //   this.x -= 50;
+           // }
+           this.draw(ctx);
+         } else if (this.x < 730) {
+           debugger
+           this.x += dx;
+           this.y += dy;
+           // if (this.collisionDetected()) {
+           //   this.x -= 50;
+           // }
+           this.draw(ctx);
+         } else if (this.x <= 999) {
+           this.x += dx;
+           this.y -= dy;
+           this.draw(ctx);
+         } else {
+           return null;
+         }
+       }
     };
     window.requestAnimationFrame(animateCallback);
 
@@ -521,9 +547,10 @@ class Blossom {
    }
 
    explodeBlossom() {
-     debugger
-     let explosion = new Explosion(this.ctx3)
+
+     let explosion = new Explosion(this.x, this.y, this.ctx3);
      explosion.drawSprite();
+
      // let currentFrame = 0;  // the current frame to draw
      // let counter = 0;
      // let exlpodeImage = new Image();
@@ -609,6 +636,10 @@ class Blossom {
    // moveUp() {
    //   if {this.starty < }
    // }
+   removeBlossom() {
+     debugger
+     delete this;
+   }
 
 
 
@@ -673,25 +704,26 @@ module.exports = Background;
 /***/ (function(module, exports) {
 
 class Explosion {
-  constructor(ctx3) {
+  constructor(x, y, ctx3) {
     this.animateCallback = this.animateCallback.bind(this);
-    debugger
+
     this.ctx3 = ctx3;
     this.start = Date.now();
     this.frame = 0;
+    this.blossomX = x;
+    this.blossomY = y;
   }
 
 
   animateCallback(ctx3) {
-    debugger
+
     return () => {
-      this.ctx3.clearRect(0, 0, 128, 128);
+      // this.ctx3.clearRect(this.blossomX, this.blossomY, 30, 70);
       // ctx3.drawImage(this.explodeImage, this.explodeImage.startPos, 128, 128, 128, 0, 0, 128, 128);
       //
       // this.explodeImage.startPos += 128;
       // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
-      this.ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
-
+      this.ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, this.blossomX / 8.3, this.blossomY / 5.9, 30, 70);
       this.explodeImage.startPosX += 128;
 
       if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
@@ -700,32 +732,27 @@ class Explosion {
         this.explodeImage.count += 1;
 
       }
-      debugger
-      if (Date.now() - this.start < 5000) {
+
+      if (Date.now() - this.start < 8000) {
       window.requestAnimationFrame(this.animateCallback(this.ctx3).bind(this));
       }
     };
   }
 
   animate(ctx3) {
-    debugger
+
     window.requestAnimationFrame(this.animateCallback(this.ctx3).bind(this));
   }
 
   drawSprite() {
-
-    this.height = 128;
-    this.width = 128;
-    let framesPerRow = 8;
-    let currentFrame = 0;
     this.explodeImage = new Image();
     this.explodeImage.src = "./assets/images/explosion_sprite.png";
     this.explodeImage.startPosX = 0;
     this.explodeImage.startPosY = 0;
     this.explodeImage.count = 0;
 
+    // this.ctx3.clearRect(this.blossomX / 8.8, this.blossomY / 5.7, 30, 70);
     this.explodeImage.onload = () => {
-      this.ctx3.clearRect(0, 0, 128, 128);
       this.animate(this.ctx3);
 
 
@@ -733,10 +760,10 @@ class Explosion {
 
     }
   // animateCallback(ctx3) {
-  //   debugger
+  //
   //   // return () => {
   //     // ctx3.clearRect(0, 0, 128, 128);
-  //     debugger
+  //
   //     this.ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
   //
   //     this.explodeImage.startPosX += 128;
@@ -754,14 +781,14 @@ class Explosion {
   // }
   //
   // animate(ctx3) {
-  //   debugger
+  //
   //   this.animateCallback(ctx3);
   //   // .bind(this);
   //   // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
   // }
   //
   // drawSprite(ctx3) {
-  //   debugger
+  //
   //   this.explodeImage = new Image();
   //   this.explodeImage.src = "./assets/images/explosion_sprite.png";
   //   this.explodeImage.startPosX = 0;
@@ -795,6 +822,54 @@ class Explosion {
 }
 
 module.exports = Explosion;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+WORDS = {
+  "One Tenth": 0.1,
+  "Two Tents": 0.2,
+  "Three Tenths": 0.3,
+  "Four Tenths": 0.4,
+  "Five Tenths": 0.5,
+  "6 Tenths": 0.6,
+  "8 Tenths": 0.8,
+  "Ten Hundredths": 0.10,
+  "One Hundredth": 0.01,
+  "Sixteen Hundredths": 0.16,
+  "One an One Tenth": 1.1,
+  "Zero and Three Hundredths": 0.03,
+  "One Thousandth": 0.001,
+  "Eleven Thousandths": 0.011,
+  "Nine Tenths": 0.09,
+  "Forty-One Hundreths": 0.41,
+  "One and Fourteen Hundredths": 1.14,
+  "Eighty-One Thousandths": 0.81,
+  "Eighteen Hundredths": 18,
+  "Ninety-Nine Thousandths": 0.099,
+  "Three Hundred and Fifteen Thousandths": 0.315
+};
+
+class Word {
+  constructor() {
+    this.value = null;
+    this.match = null;
+  }
+
+  renderWord() {
+    let keys = Object.keys(WORDS);
+    let length = keys.length;
+    let rnd = Math.floor(Math.random()*length);
+    let key = keys[rnd];
+    return key;
+    // console.log(WORDS[key]);
+    // return WORDS[key];
+  }
+}
+
+module.exports = Word;
 
 
 /***/ })

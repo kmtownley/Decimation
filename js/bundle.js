@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //   };
   // });
 
-  const game = new Game();
+  const game = new Game(ctx, ctx2, ctx3);
 
   game.beginBackground(ctx2);
   game.start(ctx, ctx3);
@@ -156,7 +156,7 @@ const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
 
 class Game {
-  constructor(ctx, ctx3) {
+  constructor(ctx, ctx2, ctx3) {
     this.blossoms = [];
     this.valid = false;
     this.selection = null;
@@ -182,7 +182,7 @@ class Game {
   start(ctx, ctx3) {
     // this.renderBackground(ctx);
     this.draw(ctx);
-    this.drawSprite(ctx3);
+    // this.drawSprite(ctx3);
     // this.collisionHandler();
   }
 
@@ -279,7 +279,7 @@ class Game {
     this.explodeImage.count = 0;
 
     this.explodeImage.onload = () => {
-      ctx3.clearRect(0, 0, 128, 128);
+      this.ctx3.clearRect(0, 0, 128, 128);
       this.animate(ctx3);
 
       // const animateCallback = () => {
@@ -341,12 +341,18 @@ class Game {
   // }
 
   receiveMouseXY(x, y) {
-
+    // console.log(x, y)
     if (this.blossoms !== undefined) {
       this.blossoms.forEach(blossom => {
-        if (x < blossom.x + 100 && x > blossom.x - 100 ) {
-
-          blossom.messageUser();
+        // debugger
+        // console.log(blossom)
+        if ((x < blossom.x + 100 && x > blossom.x) && (y > blossom.y + 100 && y < blossom.y + 208 ) && blossom.x !== 0) {
+          console.log("GOT IN")
+          this.blossomExploded = true;
+          debugger
+          // delete this.blossoms[blossom];
+          blossom.explodeBlossom(this.ctx3);
+          // this.drawSprite();
         }
       });
     }

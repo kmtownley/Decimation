@@ -68,13 +68,10 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const Blossom = __webpack_require__(2);
-const Explosion = __webpack_require__(4);
+
 const Game = __webpack_require__(1);
 
 document.addEventListener("DOMContentLoaded", () => {
-
-
-
   let canvasEl = document.getElementById("myCanvas");
   canvasEl.width = 1000;
   canvasEl.height = 500;
@@ -145,8 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const game = new Game(ctx, ctx2, ctx3, ctxWords);
 
-  // game.beginBackground(ctx2);
-  game.gameLoop(ctx, ctx2, ctx3);
+  game.beginBackground(ctx2);
+  game.start(ctx, ctx3);
 
   window.Blossom = Blossom;
 

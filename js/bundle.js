@@ -185,7 +185,8 @@ class Game {
   start(ctx, ctx3) {
     this.draw(ctx);
     this.drawSprite(ctx3);
-    Word.prototype.renderWord();
+    let word = new Word();
+    word.findWord();
   }
 
   createBlossoms() {
@@ -283,6 +284,8 @@ module.exports = Game;
 
 BLOSSOM = new Image();
 BLOSSOM.src = "./assets/images/whole_blossom.png";
+const Word = __webpack_require__(5);
+
 const Explosion = __webpack_require__(4);
 
 
@@ -298,6 +301,8 @@ class Blossom {
     this.ctx = ctx;
     this.blossomExploded = false;
     this.renderBlossom = this.renderBlossom.bind(this);
+    this.decimalValue = (new Word()).decimalValue;
+    // this.decimalValue =
 
     // this.isOutOfBounds = this.isOutOfBounds.bind(this)
   }
@@ -332,7 +337,7 @@ class Blossom {
        // ctx.fillRect(0, 0, 1000, 500);
     };
     if (this.blossomExlpoded === true) {
-      debugger
+
       this.blossom = ctx.createImageData(128, 128);
         for (let i = this.blossom.data.length; --i >= 0; )
           this.blossom.data[i] = 0;
@@ -347,21 +352,28 @@ class Blossom {
     // };
     // return this.blossom;
     ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+    // ctx.font = '40pt Calibri';
+    // ctx.fillText(this.decimalValue, 18, 18);
+
+    ctx.font="24px Varela Round";
+    // ctx.fillStyle
+    ctx.fillText(this.decimalValue, this.x + 37, this.y + 73);
+
 
     const animateCallback = () => {
       if (this.explodedBlossom !== true) {
         if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
           this.x += dx;
           this.y += dy;
-          debugger
+
           this.renderBlossom(ctx);
         } else if (this.x < 400) {
-          debugger
+
            this.x += dx;
            this.y -= dy;
            this.renderBlossom(ctx);
          } else if (this.x < 730) {
-           debugger
+
            this.x += dx;
            this.y += dy;
            this.renderBlossom(ctx);
@@ -379,7 +391,7 @@ class Blossom {
    }
 
    renderBlossom() {
-     debugger
+
      if (this.blossomExploded === true) {
        this.blossom = this.ctx.createImageData(128, 128);
          for (let i = this.blossom.data.length; --i >= 0; )
@@ -523,7 +535,7 @@ class Blossom {
    //   if {this.starty < }
    // }
    removeBlossom() {
-     debugger
+
      delete this;
    }
 
@@ -763,8 +775,8 @@ WORDS = {
   "Three Tenths": 0.3,
   "Four Tenths": 0.4,
   "Five Tenths": 0.5,
-  "6 Tenths": 0.6,
-  "8 Tenths": 0.8,
+  "Six Tenths": 0.6,
+  "Eight Tenths": 0.8,
   "Ten Hundredths": 0.10,
   "One Hundredth": 0.01,
   "Sixteen Hundredths": 0.16,
@@ -776,18 +788,22 @@ WORDS = {
   "Forty-One Hundreths": 0.41,
   "One and Fourteen Hundredths": 1.14,
   "Eighty-One Thousandths": 0.81,
-  "Eighteen Hundredths": 18,
+  "Eighteen Hundredths": 0.18,
   "Ninety-Nine Thousandths": 0.099,
   "Three Hundred and Fifteen Thousandths": 0.315
 };
 
 class Word {
   constructor() {
-    this.value = null;
+    debugger
+    this.wordValue = this.createWord();
+    this.decimalValue = this.createDecimal(this.wordValue);
     this.match = null;
+
   }
 
-  renderWord() {
+  createWord() {
+    debugger
     let keys = Object.keys(WORDS);
     let length = keys.length;
     let rnd = Math.floor(Math.random()*length);
@@ -795,6 +811,22 @@ class Word {
     return key;
     // console.log(WORDS[key]);
     // return WORDS[key];
+  }
+
+  createDecimal(key) {
+
+    // let keys = Object.keys(WORDS);
+    // let length = keys.length;
+    // let rnd = Math.floor(Math.random()*length);
+    // let key = keys[rnd];
+    return WORDS[key];
+  }
+
+  isMathch(word, dec) {
+    debugger
+    let decimal = findDecimal(key);
+    return (WORDS[word] === decimal ? true : false);
+
   }
 }
 

@@ -68,10 +68,13 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const Blossom = __webpack_require__(2);
-
+const Explosion = __webpack_require__(4);
 const Game = __webpack_require__(1);
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
+
   let canvasEl = document.getElementById("myCanvas");
   canvasEl.width = 1000;
   canvasEl.height = 500;
@@ -84,15 +87,25 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
 
-  canvasEl.onclick = function(e) {
-    // let x = e.clientX;
-    // let y = e.clientY;
+  // canvasEl.onclick = function(e) {
+  //   // let x = e.clientX;
+  //   // let y = e.clientY;
+  //   let x = e.pageX - canvasLeft;
+  //   let y = e.pageY - canvasTop;
+  //   console.log(x, y);
+  //
+  //   game.receiveMouseXY(x, y);
+  // };
+  let clickyEl = document.querySelector(".clicky");
+
+
+
+  clickyEl.addEventListener("click", (e) => {
     let x = e.pageX - canvasLeft;
     let y = e.pageY - canvasTop;
     console.log(x, y);
-
     game.receiveMouseXY(x, y);
-  };
+  });
 
   let backgroundEl = document.getElementById("canvasBackground");
   backgroundEl.height = 100;
@@ -127,10 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
   //   };
   // });
 
-  const game = new Game();
+  const game = new Game(ctx, ctx2, ctx3);
 
-  game.beginBackground(ctx2);
-  game.start(ctx, ctx3);
+  // game.beginBackground(ctx2);
+  game.gameLoop(ctx, ctx2, ctx3);
 
   window.Blossom = Blossom;
 
@@ -145,68 +158,112 @@ const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
 
 class Game {
-  constructor(ctx, ctx3) {
+  constructor(ctx, ctx2, ctx3) {
     this.blossoms = [];
     this.valid = false;
+    this.blossomExploded = false;
     this.selection = null;
     this.draw = this.draw.bind(this);
-    this.renderBackground = this. renderBackground.bind(this);
+    this.drawSprite = this.drawSprite.bind(this);
+    // this.renderBackground = this.renderBackground.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
+    this.gameLoop = this.gameLoop.bind(this);
     this.xDim = 0;
     this.yDim = 0;
     this.drawnBlossoms = [];
+    this.lastTime = (new Date()).getTime();
+    this.currentTime = 0;
+    this.delta = 0;
+    this.ctx = ctx;
+    this.ctx2 = ctx2;
     this.ctx3 = ctx3;
+    this.blossom = new Blossom(this.ctx2, this.ctx3);
+    this.background = new Background(this.ctx2);
 
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
-        this.createBlossoms()
+        this.createBlossoms(this.ctx)
       );
     }
   }
 
-  beginBackground(ctx2) {
-    this.renderBackground(ctx2);
-  }
+  gameLoop() {
+    this.currentTime = (new Date()).getTime();
+    this.delta = (this.currentTime - this.lastTime) / 1000;
+    this.ctx.clearRect(0, 0, 1000, 500);
+    // this.draw(ctx);
+    // this.renderBackground(this.ctx2);
+    this.drawSprite();
+    this.background.scrollImage();
+    this.draw();
+    window.requestAnimationFrame(this.gameLoop);
 
-  start(ctx, ctx3) {
-    // this.renderBackground(ctx);
-    this.draw(ctx);
-    this.drawSprite(ctx3);
-    // this.collisionHandler();
+    this.lastTime = this.currentTime;
+
+
   }
+  // function update(progress) {
+  // // Update the state of the world for the elapsed time since last render
+  // }
+  //
+  // function draw() {
+  //   // Draw the state of the world
+  // }
+  //
+  // function loop(timestamp) {
+  //   var progress = timestamp - lastRender
+  //
+  //   update(progress)
+  //   draw()
+  //
+  //   lastRender = timestamp
+  //   window.requestAnimationFrame(loop)
+  // }
+  // var lastRender = 0
+  // window.requestAnimationFrame(loop)
+
+  // beginBackground(ctx2) {
+  //   this.renderBackground(ctx2);
+  // }
+
+  // start(ctx, ctx3) {
+  //   // this.renderBackground(ctx);
+  //   // this.drawSprite(ctx3)
+  //   this.draw(ctx);
+  // }
 
   createBlossoms() {
-    return Blossom.randomBlossom(0, Game.DIM_Y, Game.NUM_BLOSSOMS);
+    // debugger
+    // return Blossom.randomBlossom(0, Game.DIM_Y, this.ctx2);
+    let blossom = new Image();
+    blossom.src = "./assets/images/whole_blossom.png";
+
+    // debugger
+    return new Blossom(
+      0 * Math.random(),
+      450 * Math.random(),
+      // numBlossoms += 1,
+      this.ctx2,
+      this.ctx3
+
+    );
   }
 
-  drawBlossoms(ctx) {
+  drawBlossoms() {
     let i = 0;
-
     return () => {
       if (i == 40) clearInterval(this.interval);
-      this.blossoms[i].draw(ctx);
+      this.blossoms[i].draw(this.ctx);
 
       i += 1;
     };
   }
 
-  draw(ctx) {
-    this.interval = setInterval(this.drawBlossoms(ctx).bind(this), 3000);
-  }
+  draw() {
 
-  renderBackground(ctx2) {
-    new Background(0, 500).scrollImage(ctx2);
-  }
 
-  // findVisibleBlossoms() {
-  //
-  //   this.blossoms.forEach(blossom => {
-  //     if (blossom.x > 0) {
-  //       this.visibleBlossoms.push(blossom);
-  //     }
-  //   });
-  //   return this.visibleBlossoms;
-  // }
+    this.interval = setInterval(this.drawBlossoms(this.ctx).bind(this), 6000);
+  }
 
   collisionHandler(blossom, nextBlossom) {
     this.blossoms.forEach((blossom, idx) => {
@@ -219,48 +276,35 @@ class Game {
 
 
 
-  animateCallback(ctx3) {
+  animateCallback() {
     debugger
     return () => {
-      ctx3.clearRect(0, 0, 128, 128);
-      // ctx3.drawImage(this.explodeImage, this.explodeImage.startPos, 128, 128, 128, 0, 0, 128, 128);
-      //
-      // this.explodeImage.startPos += 128;
-      // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
-      ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
+      this.ctx3.clearRect(0, 0, 128, 128);
+
+      this.ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
 
       this.explodeImage.startPosX += 128;
 
-      if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
+      if (this.explodeImage.startPosX >= 1024 && this.explodeImage.count <= 4) {
         this.explodeImage.startPosX = 0;
         this.explodeImage.startPosY += 128;
         this.explodeImage.count += 1;
-
+      // }
+      } else if (this.explodeImage.count > 4) {
+        // return null;
+         window.cancelAnimationFrame(this.animateCallback().bind(this));
       }
-      window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+      window.requestAnimationFrame(this.animateCallback().bind(this));
     };
   }
 
   animate(ctx3) {
-    debugger
-    window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+
+    window.requestAnimationFrame(this.animateCallback().bind(this));
   }
 
   drawSprite(ctx3) {
-
-    this.height = 128;
-    this.width = 128;
-
-    // let sheetWidth = 1024;
-    // let sheetHeight = 640;
-    // let frameWidth = 128;
-    // let frameHeight = 128;
-    // let cols = 8;
-    // let rows = 5;
-    // let srcX;
-    // let srcY;
-    let framesPerRow = 8;
-    let currentFrame = 0;
+    debugger
     this.explodeImage = new Image();
     this.explodeImage.src = "./assets/images/explosion_sprite.png";
     this.explodeImage.startPosX = 0;
@@ -268,74 +312,25 @@ class Game {
     this.explodeImage.count = 0;
 
     this.explodeImage.onload = () => {
-      ctx3.clearRect(0, 0, 128, 128);
+      // this.ctx3.clearRect(0, 0, 128, 128);
       this.animate(ctx3);
 
-      // const animateCallback = () => {
-      //   ctx3.clearRect(0, 0, 128, 128);
-      //   debugger
-      //   ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
-      //
-      //   this.explodeImage.startPosX += 128;
-      //
-      //   if (this.explodeImage.startPosX >= 1024 & count <= 4) {
-      //     this.explodeImage.startPosX = 0;
-      //     this.explodeImage.startPosY += 128;
-      //     count += 1;
-      //   }
-      //
-      //   window.requestAnimationFrame(animateCallback);
-        //
-        // ctx3.drawImage(this.explodeImage, 128, 128, 128, 128, 0, 0, 128, 128);
-        // ctx3.clearRect(0, 0, 128, 128);
-        // ctx3.drawImage(this.explodeImage, 256, 128, 128, 128, 0, 0, 128, 128);
-        // ctx3.clearRect(0, 0, 128, 128);
-        // ctx3.drawImage(this.explodeImage, 384, 128, 128, 128, 0, 0, 128, 128);
-        // ctx3.clearRect(0, 0, 128, 128);
       };
-
-      // window.requestAnimationFrame(animateCallback);
     }
 
-  // }
-
-
-  //   const update = () => {
-  //     currentFrame = (currentFrame + 1 % cols);
-  //
-  //     srcX = currentFrame * 128;
-  //     srcY = 0;
-  //   };
-  //
-  //   const createImage = (context) => {
-  //
-  //     update();
-  //     context.drawImage(explodeImage, srcX, srcY, 128, 128);
-  //   };
-  //
-  //   setInterval(createImage, 100);
-  // }
-  //
-  // updateSprite() {
-  //     // the current frame to draw
-  //   let counter = 0;       // keep track of frame rate
-  //
-  //     // update to the next frame if it is time
-  //   if (counter == (frameSpeed - 1)) {
-  //       currentFrame = (currentFrame + 1) % endFrame;
-  //
-  //     // update the counter
-  //     counter = (counter + 1) % frameSpeed;
-  //     }
-  // }
-
   receiveMouseXY(x, y) {
-
+    // console.log(x, y)
     if (this.blossoms !== undefined) {
       this.blossoms.forEach(blossom => {
-        if (x < blossom.x + 100 && x > blossom.x - 100 ) {
-
-          blossom.messageUser();
+        // debugger
+        // console.log(blossom)
+        if ((x < blossom.x + 100 && x > blossom.x) && (y > blossom.y + 100 && y < blossom.y + 208 ) && blossom.x !== 0) {
+          // console.log("GOT IN")
+          this.blossomExploded = true;
+          debugger
+          // delete this.blossoms[blossom];
+          // blossom.explodeBlossom(this.ctx3);
+          this.drawSprite();
         }
       });
     }
@@ -368,106 +363,90 @@ module.exports = Game;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 BLOSSOM = new Image();
 BLOSSOM.src = "./assets/images/whole_blossom.png";
+const Explosion = __webpack_require__(4);
 
 
 class Blossom {
-  constructor(x, y) {
-    this.x = x;
+  constructor(x, y, ctx, ctx3) {
+    this.x = 0;
     this.y = Math.random() * 400 + 6;
     this.drawnBlossoms = [];
     this.visibleBlossoms = [];
     this.height = 125;
     this.width = 125;
+    this.increments = [1, 2];
+    this.dx = 1.1;
+    this.dy = 0.9;
+    this.fps = 30;
+    this.now = 0;
+    this.then = Date.now();
+    this.interval = 1000/this.fps;
+    this.delta = 0;
+    this.draw = this.draw.bind(this);
+    this.ctx = ctx;
+    this.ctx3 = ctx3;
 
-    // this.isOutOfBounds = this.isOutOfBounds.bind(this)
   }
-  //
-  // model() {
-  //   this.rot += 0.1 * this.direc;
-  //   this.x += this.xVec;
-  //   this.yVec += this.gravity;
-  //   this.y += this.yVec;
-  //   this.bounceIf();
-  // }
-  //
-  // bounceIf() {
-  //   if (this.y >= this.bottom || this.y <= this.top) {
-  //     this.y = this.bottom;
-  //     this.yVec = -1 * this.yVec;
-  //   }
-  //
-  // }
+
+  draw() {
+    this.ctx;
+
+    // let increments = [1, 2];
+    // let dx = 1.1;
+    // let dy = 0.9;
+
+    requestAnimationFrame(this.draw);
+    this.now = Date.now();
+    this.delta = this.now - this.then;
+
+    if (this.delta > this.interval) {
 
 
+      this.then = this.now - (this.delta % this.interval);
+
+      // ... Code for Drawing the Frame ...
+      this.blossom = new Image();
+      this.blossom.src = './assets/images/whole_blossom.png';
+      // this.blossom.onload = function() {
+      //   debugger
+      //   this.ctx2.fillRect(0, 0, 1000, 500);
+      // };
+      // this.ctx.fillRect(this.x, this.y, 125, 125);
+      this.ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+
+      // const animateCallback = () => {
+      if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.draw(this.ctx2);
+      } else if (this.x < 450) {
+        this.x += this.dx;
+        this.y -= this.dy;
+        this.draw(this.ctx2);
+      } else if (this.x < 730) {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.draw(this.ctx2);
+      } else if (this.x <= 999) {
+        this.x += this.dx;
+        this.y -= this.dy;
+        this.draw(this.ctx2);
+      } else {
+        return null;
+      }
+    }
+  }
+  // this.draw();
 
 
-  draw(ctx) {
-    let increments = [1, 2];
-    let dx = 1.1;
-    let dy = 0.9;
-    this.blossom = new Image();
-    this.blossom.src = './assets/images/whole_blossom.png';
-    this.blossom.onload = function() {
-      // ctx.drawImage(blossom, 10, 10, 125, 125);
-       ctx.fillRect(0, 0, 1000, 500);
-    };
-    // ctx.onclick = () => {
-    //
-    //   // let mouseX = e.clientX;
-    //   // let mouseY = e.clientY;
-    //   console.log("yay");
-    // };
-    // return this.blossom;
-    ctx.drawImage(this.blossom, this.x, this.y, 125, 125 );
+    // }
+    // window.requestAnimationFrame(animateCallback);
 
-    const animateCallback = () => {
-    if (this.x <= Math.random() * 320 + 3  && this.y < Math.random() * 600 + 4) {
-      this.x += dx;
-      this.y += dy;
-      // if (this.collisionDetected()) {
-      //   this.x -= 50;
-      // }
-      this.draw(ctx);
-    } else if (this.x < 450) {
-       this.x += dx;
-       this.y -= dy;
-       // if (this.collisionDetected()) {
-       //   this.x -= 50;
-       // }
-       this.draw(ctx);
-     } else if (this.x < 730) {
-       this.x += dx;
-       this.y += dy;
-       // if (this.collisionDetected()) {
-       //   this.x -= 50;
-       // }
-       this.draw(ctx);
-     } else if (this.x <= 999) {
-       this.x += dx;
-       this.y -= dy;
-       this.draw(ctx);
-     } else {
-       return null;
-     }
-    };
-    window.requestAnimationFrame(animateCallback);
 
-   }
-
-   // findVisibleBlossoms() {
-   //
-   //
-   //   this.drawnBlossoms.forEach(blossom => {
-   //     if (blossom.x > 0) {
-   //       this.visibleBlossoms.push(blossom);
-   //     }
-   //   });
-   //   return this.visibleBlossoms;
-   // }
 
    collisionDetected(blossom, nextBlossom) {
 
@@ -481,13 +460,6 @@ class Blossom {
 
        });
      }
-
-     // return !(
-     // (this.x + this.height) < otherBlossom.y ||
-     //    (this.y > (otherBlossom.y + otherBlossom.height)) ||
-     //   ((this.x + this.width) < otherBlossom.x) ||
-     //   (this.x > (otherBlosom.x + otherBlossom.width))
-     // );
    }
 
    moveRandom(maxY) {
@@ -501,16 +473,10 @@ class Blossom {
 
    }
 
-   explodeBlossom() {
-     // let currentFrame = 0;  // the current frame to draw
-     // let counter = 0;
-     // let exlpodeImage = new Image();
-     // let framesPerRow;
-     // this.explodeImage.onload = () => {
-     //   framesPerRow = Math.floor(explodeImage.width / 128);
-     // };
-     //
-     // explodImage.src = "../assets/images/explosion_sprite.png";
+   explodeBlossom(ctx3) {
+     debugger
+
+     Explosion.prototype.drawSprite(this.ctx3);
    }
 
    // updateSprite() {
@@ -523,7 +489,7 @@ class Blossom {
    // }
   // draw(ctx) {
   //
-  //   let dx = 1.1;
+  //   let this.dx = 1.1;
   //   // let dy;
   //   if (this.dy === null) {
   //     this.dy = (Math.random() * 4) - 1;
@@ -570,37 +536,24 @@ class Blossom {
   //   }
 
 
-   // reverseDy(dy) {
-   //   return (
-   //   this.dy = dy * -1
-   //   );
-   // }
-   //
-   // isOutOfBounds(y) {
-   //   if (y > 300 || y < 1 ) {
-   //     return true;
-   //   } else {
-   //     return false;
-   //   }
-   // }
 
-   // moveUp() {
-   //   if {this.starty < }
-   // }
 
 
 
 }
 
-Blossom.randomBlossom = (maxX, maxY, numBlossoms) => {
-
-  let blossom = new Image();
+Blossom.randomBlossom = (maxX, maxY, ctx) => {
+  // debugger;
+  let blossom = new Image(ctx);
   blossom.src = "./assets/images/whole_blossom.png";
 
+  // debugger
   return new Blossom(
     maxX * Math.random(),
     maxY * Math.random(),
-    numBlossoms += 1
+    // numBlossoms += 1,
+    ctx
+
   );
 };
 
@@ -613,36 +566,119 @@ module.exports = Blossom;
 /***/ (function(module, exports) {
 
 class Background {
-  constructor() {
-  }
-
-  scrollImage(ctx2) {
+  constructor(ctx2) {
+    this.x = 0;
+    this.count = 1;
     this.img = new Image();
     this.img.src = './assets/images/footer_image_tower.png';
+    this.width = 405;
+    this.min = 0 - this.width;
+    this.ctx2 = ctx2;
+  }
 
-    this.img.onload = () => {
-    let x = 0;
-    let width = this.img.naturalWidth;
-    let min = 0 - width;
-    let count = 1;
+  scrollImage() {
+    // let x = 0;
+    // let width = this.img.naturalWidth;
+    // let min = 0 - width;
+    // let count = 1;
+    // this.img = new Image();
+    // this.img.src = './assets/images/footer_image_tower.png';
 
-      const loop = () => {
-        ctx2.fillRect(0, 0, 1000, 500);
-        ctx2.drawImage(this.img, x, 370);
-        ctx2.drawImage(this.img, x + width, 370);
-        ctx2.drawImage(this.img, x + width * 2, 370);
-        ctx2.drawImage(this.img, x + width * 3, 370);
-        x -= count;
-        if (x < min) {
-          x = 0;
+    // this.img.onload = () => {
+
+      // const loop = () => {
+        this.ctx2.fillRect(0, 0, 1000, 500);
+        this.ctx2.drawImage(this.img, this.x, 370);
+        this.ctx2.drawImage(this.img, this.x + this.width, 370);
+        this.ctx2.drawImage(this.img, this.x + this.width * 2, 370);
+        this.ctx2.drawImage(this.img, this.x + this.width * 3, 370);
+        this.x -= this.count;
+        if (this.x < this.min) {
+          this.x = 0;
         }
-      };
-    setInterval(loop, 9);
-    };
+      // };
+    // setInterval(loop, 9);
+    // };
   }
 }
 
 module.exports = Background;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+class Explosion {
+  constructor(ctx3) {
+    this.animateCallback = this.animateCallback.bind(this);
+    this.ctx3 = ctx3;
+    this.tick = 0;
+    this.frame = 0;
+  }
+  animateCallback(ctx3) {
+    debugger
+    // return () => {
+      // ctx3.clearRect(0, 0, 128, 128);
+      debugger
+      this.ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
+
+      this.explodeImage.startPosX += 128;
+
+      if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
+        this.explodeImage.startPosX = 0;
+        this.explodeImage.startPosY += 128;
+        this.explodeImage.count += 1;
+      } else if (this.explodeImage.count > 4) {
+        window.cancelAnimationFrame(this.animateCallback);
+      }
+      // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+    // };
+    window.requestAnimationFrame(this.animateCallback.bind(this));
+  }
+
+  animate(ctx3) {
+    debugger
+    this.animateCallback(ctx3);
+    // .bind(this);
+    // window.requestAnimationFrame(this.animateCallback(ctx3).bind(this));
+  }
+
+  drawSprite(ctx3) {
+    debugger
+    this.explodeImage = new Image();
+    this.explodeImage.src = "./assets/images/explosion_sprite.png";
+    this.explodeImage.startPosX = 0;
+    this.explodeImage.startPosY = 0;
+    this.explodeImage.count = 0;
+
+    // this.explodeImage.onload = () => {
+      // ctx3.clearRect(0, 0, 128, 128);
+      // this.animate(ctx3);
+    // for (var i = 0; i < 40; i++) {
+      ctx3.drawImage(this.explodeImage, this.explodeImage.startPosX, this.explodeImage.startPosY, 128, 128, 0, 0, 128, 128);
+
+      this.explodeImage.startPosX += 128;
+      ctx3.clearRect(0,0, 128, 128);
+
+      if (this.explodeImage.startPosX >= 1024 & this.explodeImage.count <= 4) {
+        this.explodeImage.startPosX = 0;
+        this.explodeImage.startPosY += 128;
+        this.explodeImage.count += 1;
+      }
+
+      // setInterval(this.drawSprite, 20);
+
+    // }
+    // this.drawSprite(ctx3);
+
+      // };
+  }
+
+
+}
+
+module.exports = Explosion;
 
 
 /***/ })

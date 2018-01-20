@@ -41,16 +41,9 @@ main {
   width: 100%;
 }
 
-/* .canvas-container {
-  background: #ffffff;
-  position: absolute;
-  margin-top: 35px;
-  height: 481px;
-  width: 70%;
-  z-index: 0;
-  border-radius: 44px;
-  margin-left: 382px;
-} */
+.canvas-container {
+  position: relative;
+}
 
 .canvas-container-footer {
   background-image: url(../assets/images/footer_image_tower.png);
@@ -71,15 +64,30 @@ main {
 }
 
 #canvasBackground {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   z-index: 0;
 }
 
+
+
 #canvasExplosion {
-  position: relative;
+  position: absolute;
   margin-top: 18px;
+  width: 1000px;
+  height: 500px;
   border-radius: 44px;
   margin-left: 396px;
   z-index: 3;
+}
+
+.clicky {
+  position: absolute;
+  width: 1000px;
+  height: 500px;
+  margin-top: 18px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 99;
+
 }

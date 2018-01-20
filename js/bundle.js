@@ -220,9 +220,9 @@ class Game {
   // var lastRender = 0
   // window.requestAnimationFrame(loop)
 
-  // beginBackground(ctx2) {
-  //   this.renderBackground(ctx2);
-  // }
+  beginBackground(ctx2) {
+    this.renderBackground(ctx2);
+  }
 
   // start(ctx, ctx3) {
   //   // this.renderBackground(ctx);

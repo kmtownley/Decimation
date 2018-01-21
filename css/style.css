@@ -1,5 +1,3 @@
-
-
 #myCanvas {
   position: absolute;
   margin-top: 18px;
@@ -40,7 +38,24 @@ body {
   margin: 0 0 0 0;
 }
 
-.wordContainer {
+#gemScore {
+  width: 247px;
+  height: 73px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  margin: 203px 67px;
+  font-size: 24px;
+  font-family: 'Varela Round', sans-serif;
+  line-height: 76px;
+}
+
+.gameInfoContainer {
+  position: absolute;
+  width: 400px;
+  height: 500px;
+}
+
+.wordsContainer {
   width: 306px;
   height: 90px;
   background-color: black;
@@ -48,7 +63,20 @@ body {
   border-radius: 10px;
   border: 1px solid #ffffff;
   margin: 59px 39px;
+  color: #ffffff;
+  text-align: center;
+}
 
+.scoreContainer {
+  text-align: center;
+
+}
+
+.words {
+  margin-top: 20px;
+  font-family: 'Varela Round', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
 }
 /* #880000; */
 /* #ffb7b7 */
@@ -75,6 +103,8 @@ h3 {
   margin: auto;
   padding: 14px 38px;
   font-size: 52px;
+  display: flex;
+  justify-content: space-between;
 }
 
 main {

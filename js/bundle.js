@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
   clickyEl.addEventListener("click", (e) => {
     let x = e.pageX - canvasLeft;
     let y = e.pageY - canvasTop;
-    console.log(x, y);
     game.receiveMouseXY(x, y);
   });
 
@@ -126,19 +125,24 @@ document.addEventListener("DOMContentLoaded", () => {
 const Blossom = __webpack_require__(2);
 const Background = __webpack_require__(3);
 const Word = __webpack_require__(5);
+const Player = __webpack_require__(6);
 
 class Game {
   constructor(ctx, ctx2, ctx3, ctxWords) {
     this.blossoms = [];
+    this.visibleBlossoms = [];
     this.valid = false;
     this.selection = null;
     this.draw = this.draw.bind(this);
-    this.renderBackground = this. renderBackground.bind(this);
+    // this.renderBackground = this. renderBackground.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
+    // this.findVisibleBlossoms = this.findVisibleBlossoms.bind(this);
     this.xDim = 0;
     this.yDim = 0;
     this.ctx3 = ctx3;
     this.ctx = ctx;
+    this.visibleWords = [];
+    this.player = new Player();
     //
     for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
       this.blossoms.push(
@@ -154,8 +158,10 @@ class Game {
   start(ctx, ctx3) {
     this.draw(ctx);
     this.drawSprite(ctx3);
-    let word = new Word();
-    word.findWord();
+    // let word = new Word();
+    // word.findWord();
+    // let player = new Player();
+    Word.prototype.renderWordChoice(this.visibleWords);
   }
 
   createBlossoms() {
@@ -164,30 +170,48 @@ class Game {
 
   drawBlossoms(ctx) {
     let i = 0;
-
     return () => {
       if (i == 40) clearInterval(this.interval);
+      this.findVisibleWords();
       this.blossoms[i].draw(ctx);
       i += 1;
     };
   }
 
   draw() {
-    this.interval = setInterval(this.drawBlossoms(this.ctx).bind(this), 3000);
+    this.interval = setInterval(this.drawBlossoms(this.ctx).bind(this), 2500);
   }
 
   renderBackground(ctx2) {
     new Background(0, 500).scrollImage(ctx2);
   }
 
-  collisionHandler(blossom, nextBlossom) {
-    this.blossoms.forEach((blossom, idx) => {
-      let nextBlossom = this.blossoms[idx + 1];
-      if (blossom.x > nextBlossom.x) {
-        blossom.x -= 10;
+  findVisibleWords() {
+    debugger
+    this.blossoms.forEach(blossom => {
+      if (blossom.x > 0 && blossom.x < 1000) {
+        this.visibleBlossoms.push(blossom);
       }
     });
+    this.visibleBlossoms.forEach(blossom => {
+
+      if (!this.visibleWords.includes(blossom.wordValue)) {
+        this.visibleWords.push(blossom.wordValue);
+        debugger
+        Word.prototype.renderWordChoice(this.visibleWords);
+      }
+    });
+
   }
+  //
+  // collisionHandler(blossom, nextBlossom) {
+  //   this.blossoms.forEach((blossom, idx) => {
+  //     let nextBlossom = this.blossoms[idx + 1];
+  //     if (blossom.x > nextBlossom.x) {
+  //       blossom.x -= 10;
+  //     }
+  //   });
+  // }
 
   animateCallback(ctx3) {
     return () => {
@@ -214,7 +238,6 @@ class Game {
     this.explodeImage.startPosX = 0;
     this.explodeImage.startPosY = 0;
     this.explodeImage.count = 0;
-
     this.explodeImage.onload = () => {
       this.ctx3.clearRect(0, 0, 128, 128);
       this.animate(ctx3);
@@ -226,13 +249,18 @@ class Game {
       this.blossoms.forEach((blossom, idx) => {
 
         if ((x < blossom.x + 100 && x > blossom.x) && (y > blossom.y + 100 && y < blossom.y + 208 ) && blossom.x !== 0) {
-          blossom.blossomExploded = true;
-          blossom.removeBlossom();
-
-          if (idx !== -1) {
+          //bl
+          if (Word.prototype.isMatch(blossom.wordValue)) {
+            // blossom.removeBlossom();
+            this.player.addGems();
+            blossom.blossomExploded = true;
+            if (idx !== -1) {
               this.blossoms.splice(idx, 1);
+            }
+            blossom.explodeBlossom(this.ctx3);
+          } else {
+            this.player.removeGems();
           }
-          blossom.explodeBlossom(this.ctx3);
         }
       });
     }
@@ -263,13 +291,14 @@ class Blossom {
     this.y = Math.random() * 400 + 6;
     this.drawnBlossoms = [];
     this.visibleBlossoms = [];
-    this.height = 125;
-    this.width = 125;
     this.ctx3 = ctx3;
     this.ctx = ctx;
     this.blossomExploded = false;
     this.renderBlossom = this.renderBlossom.bind(this);
-    this.decimalValue = (new Word()).decimalValue;
+    this.value = new Word();
+    this.decimalValue = this.value.decimalValue;
+    this.wordValue = this.value.wordValue;
+
   }
 
   draw(ctx) {
@@ -312,6 +341,7 @@ class Blossom {
            this.y -= dy;
            this.renderBlossom(ctx);
          } else {
+
            return null;
          }
        }
@@ -320,7 +350,6 @@ class Blossom {
    }
 
    renderBlossom() {
-
      if (this.blossomExploded === true) {
        this.blossom = this.ctx.createImageData(128, 128);
          for (let i = this.blossom.data.length; --i >= 0; )
@@ -330,16 +359,15 @@ class Blossom {
        this.draw(this.ctx);
      }
    }
-   // findVisibleBlossoms() {
-   //
-   //
-   //   this.drawnBlossoms.forEach(blossom => {
-   //     if (blossom.x > 0) {
-   //       this.visibleBlossoms.push(blossom);
-   //     }
-   //   });
-   //   return this.visibleBlossoms;
-   // }
+   findVisibleBlossoms() {
+     this.drawnBlossoms.forEach(blossom => {
+       if (blossom.x > 0) {
+         this.visibleBlossoms.push(blossom);
+       }
+     });
+     return this.visibleBlossoms;
+   }
+
 
    collisionDetected(blossom, nextBlossom) {
      this.findVisibleBlossoms();
@@ -363,6 +391,12 @@ class Blossom {
      explosion.drawSprite();
    }
 
+   findVisibleBlossoms() {
+    if (this.x > 0 && this.x < 1000) {
+      this.visibleBlossoms.push(this);
+    }
+
+  }
 
 
    removeBlossom() {
@@ -620,44 +654,87 @@ WORDS = {
   "Three Hundred and Fifteen Thousandths": 0.315
 };
 
+let DISPLAYED_WORD = null;
+
 class Word {
   constructor() {
-    debugger
     this.wordValue = this.createWord();
     this.decimalValue = this.createDecimal(this.wordValue);
     this.match = null;
+    this.display = false;
 
   }
 
   createWord() {
-    debugger
     let keys = Object.keys(WORDS);
     let length = keys.length;
     let rnd = Math.floor(Math.random()*length);
     let key = keys[rnd];
     return key;
-    // console.log(WORDS[key]);
-    // return WORDS[key];
   }
 
   createDecimal(key) {
-
-    // let keys = Object.keys(WORDS);
-    // let length = keys.length;
-    // let rnd = Math.floor(Math.random()*length);
-    // let key = keys[rnd];
     return WORDS[key];
   }
 
-  isMathch(word, dec) {
+  renderWordChoice(wordArray) {
+    let displayed;
     debugger
-    let decimal = findDecimal(key);
-    return (WORDS[word] === decimal ? true : false);
+    let word = wordArray[Math.floor(Math.random() * wordArray.length)];
+    debugger
+    if (wordArray.length === 0) {
+        document.querySelector(".words").innerHTML = "Let's Do This";
+
+    } else {
+      // wordArray.forEach(word => {
+        document.querySelector(".words").innerHTML = word;
+        DISPLAYED_WORD = word;
+        // word.displayed = true;
+        // setInterval(change(wordArray), 1000)
+        console.log(word);
+      // });
+    }
+  }
+
+  isMatch(wordVal) {
+    debugger;
+    return (wordVal === DISPLAYED_WORD ? true : false);
 
   }
 }
 
 module.exports = Word;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+class Player {
+  constructor() {
+    this.gemScore = 0;
+
+    this.renderGems();
+  }
+
+  addGems() {
+    this.gemScore += 10;
+    this.renderGems();
+  }
+
+  removeGems() {
+    this.gemScore -= 10;
+    this.renderGems();
+  }
+
+  renderGems() {
+    debugger
+    document.getElementById("gemScore").innerHTML = "Score: " +  this.gemScore;
+  }
+}
+
+
+module.exports = Player;
 
 
 /***/ })

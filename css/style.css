@@ -203,6 +203,31 @@ main {
 
 }
 
+#gameOver {
+  display: none;
+  width: 1000px;
+  height: 500px;
+  margin-top: 18px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 1000;
+  color: #ffffff;
+  background-color: pink;
+  font-size: 50px;
+  background-color: black;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 958px;
+  height: 458px;
+  text-align: center;
+  line-height: 200px;
+  /* background-image: url(../assets/images/game_over.gif);
+  background-size: 50px 50px; */
+  font-family: 'Varela Round', sans-serif;
+}
+
+
+
 #myBtn {
   height: 47%;
   border-radius: 3px;
@@ -252,4 +277,25 @@ main {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.controls {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 231px;
+  height: 40px;
+  margin: -151px 75px;
+  z-index: 1010;
+}
+
+.controls .fa {
+  background-color: #ffffff;
+
+}
+
+.controls button {
+  border-radius: 8px;
+  height: 44px;
+  width: 64px;
 }

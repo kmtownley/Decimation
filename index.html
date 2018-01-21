@@ -44,7 +44,13 @@
         <div id="gemScore"></div>
       </div>
       <div class="controls">
-        <button id="pause"><i class="fa fa-pause" aria-hidden="true"></i></button>
+        <button id="stop">
+            <i class="fa fa-stop-circle fa-3x" aria-hidden="true"></i>
+        </button>
+        <input type="button" value="New Game" onClick="window.location.reload()">
+        <button id="start">
+            <i class="fa fa-play-circle fa-3x" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
     <main class="canvas-container">
@@ -53,6 +59,10 @@
       <canvas id="canvasWords"></canvas>
       <canvas id="canvasExplosion"></canvas>
       <canvas class="clicky"></canvas>
+      <span id="gameOver">Game Over! </br> To play again press start!
+        <!-- <div class="known-facts"><div> -->
+      </span>
+      <!-- <canvas id="gameOver"><canvas> -->
     </main>
   </body>
   <!-- <footer></footer> -->

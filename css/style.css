@@ -12,8 +12,6 @@
   z-index: 0;
 }
 
-
-
 #canvasExplosion {
   position: absolute;
   margin-top: 18px;
@@ -22,12 +20,7 @@
   border-radius: 44px;
   margin-left: 396px;
   z-index: 3;
-} */ */
-
-title {
-
 }
-
 
 body {
   background-image: url(../assets/images/ninja_board_background.jpg);

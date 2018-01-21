@@ -297,7 +297,7 @@ class Blossom {
     this.renderBlossom = this.renderBlossom.bind(this);
     this.value = new Word();
     this.decimalValue = this.value.decimalValue;
-    this.wordValue = this.value.wordValue;
+    this.wordValue = this.value.wordValue; 
 
   }
 
@@ -671,12 +671,32 @@ class Word {
     let rnd = Math.floor(Math.random()*length);
     let key = keys[rnd];
     return key;
+    // console.log(WORDS[key]);
+    // return WORDS[key];
   }
 
   createDecimal(key) {
+
+    // let keys = Object.keys(WORDS);
+    // let length = keys.length;
+    // let rnd = Math.floor(Math.random()*length);
+    // let key = keys[rnd];
     return WORDS[key];
   }
 
+//   var text = ["Welcome", "Hi", "Sup dude"];
+// var counter = 0;
+// var elem = document.getElementById("changeText");
+
+//
+// function change() {
+//   let counter;
+//   elem.innerHTML = wordArray[counter];
+//   counter++;
+//   if (counter >= text.length) {
+//     counter = 0;
+//   }
+// }
   renderWordChoice(wordArray) {
     let displayed;
     debugger

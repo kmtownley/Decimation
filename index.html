@@ -3,14 +3,34 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
+
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <script src="https://use.fontawesome.com/19c90ece88.js"></script>
     <title>Decimation</title>
   </head>
   <script type="application/javascript" src="js/bundle.js"></script>
   <script src="lib/board.js"></script>
   <body>
     <nav>
-      <h3>Decimation</h3>
+      <button id="myBtn">About the Game</button>
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>How To Play Decimate:</p>
+        </div>
+      </div>
+
+      <div class="title">Decimation</div>
+      <div class="link-container">
+          <a href="https://kmtownley.github.io/Decimation/">
+            <i class="fa fa-github fa-3x" aria-hidden="true"></i>
+          </a>
+          <a href=https://www.linkedin.com/in/kathleen-townley-83b039b8/>
+          <i class="fa fa-linkedin fa-3x" aria-hidden="true"></i>
+          </a>
+      </div>
+
     </nav>
     <div class="gameInfoContainer">
       <div class="wordsContainer">
@@ -28,5 +48,5 @@
       <canvas class="clicky"></canvas>
     </main>
   </body>
-  <!-- <footer></footer> -->
+  <footer></footer>
 </html>

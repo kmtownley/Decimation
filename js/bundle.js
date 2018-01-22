@@ -614,10 +614,6 @@ class Game {
     gameOverMessage.style.display = "inline-block";
   }
 
-  // pauseGame() {
-  //   document.getElementById("pause").innerHTMLE = <i class="fa fa-pause" aria-hidden="true"></i>;
-
-
   toggleGameScreen() {
     debugger
     if (this.stoppedGame === true) {

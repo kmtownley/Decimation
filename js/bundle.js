@@ -81,7 +81,7 @@ WORDS = {
   "Three hundredths": 0.03,
   "Four hundredths": 0.04,
   "Five hundredths": 0.05,
-  "Sixe hundredths": 0.06,
+  "Six hundredths": 0.06,
   "Eleven Hundredths": 0.11,
   "Sixteen Hundredths": 0.16,
   "Seventeen Hundredths": 0.017,
@@ -94,6 +94,8 @@ WORDS = {
   "One and Fourteen Hundredths": 1.14,
   "Eighty-One Thousandths": 0.81,
   "Eighteen Hundredths": 0.18,
+  "Thirteen Thousandths": 0.013,
+  "Eighty-One Thousandths": 0.081,
   "Ninety-Nine Thousandths": 0.099,
   "Three Hundred and Fifteen Thousandths": 0.315
 };
@@ -106,7 +108,7 @@ class Word {
     this.decimalValue = this.createDecimal(this.wordValue);
     this.match = null;
     this.display = false;
-    
+
 
   }
 
@@ -132,15 +134,15 @@ class Word {
   renderWordChoice(wordArray) {
     let displayed;
 
-    let word = wordArray[Math.floor(Math.random() * wordArray.length)];
-    console.log(word, wordArray);
 
     if (wordArray.length === 0) {
-        document.querySelector(".words").innerHTML = "Let's Do This";
+        document.querySelector(".words").innerHTML = "Let's Begin!";
+    } else if (wordArray === "Decimated") {
+      document.querySelector(".words").innerHTML = "Decimated";
     } else {
+      let word = wordArray[Math.floor(Math.random() * wordArray.length)];
         document.querySelector(".words").innerHTML = word;
         DISPLAYED_WORD = word;
-        console.log(word);
       // });
     }
   }
@@ -520,14 +522,11 @@ class Game {
   constructor(ctx, ctx2, ctx3, ctxWords) {
     this.blossoms = [];
     this.visibleBlossoms = [];
-    this.numBlossoms = 50;
+    // this.numBlossoms = 50;
     this.cancelGame = "";
     this.start = null;
-    // this.valid = false;
-    // this.selection = null;
     this.draw = this.draw.bind(this);
     this.startAnimation = this.startAnimation.bind(this);
-    // this.renderBackground = this. renderBackground.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
     this.findVisibleWords = this.findVisibleWords.bind(this);
     this.xDim = 0;
@@ -551,11 +550,8 @@ class Game {
   }
 
   startAnimation() {
-    debugger
-
     this.toggleStart();
     if (this.start) {
-      debugger
       this.draw(this.ctx);
       this.drawSprite(this.ctx3);
       Word.prototype.renderWordChoice(this.visibleWords);
@@ -564,38 +560,9 @@ class Game {
 
 
   controlGame() {
-    debugger
     let startButton = document.getElementById("start");
     startButton.addEventListener("click", this.startAnimation, false);
-
-    debugger
     let stopButton = document.getElementById("stop").addEventListener("click",   this.gameOver, false);
-    // this.startAnimation();
-  }
-  // resetGame() {
-  //   this.blossoms = [];
-  //   for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
-  //     this.blossoms.push(
-  //       this.createBlossoms()
-  //     );
-  //     Player.gemscore = 0;
-  //   }
-  //   this.draw();
-  // }
-  // pauseGame(ctx) {
-  //   debugger
-  //   this.cancelGame = true;
-  //   Blossom.prototype.draw;
-  // }
-
-  togglePause() {
-    debugger
-    if (!this.paused) {
-      this.paused = true;
-    } else if (this.paused) {
-      this.paused= false;
-      // this.start(this.ctx, this.ctx3)
-    }
   }
 
   toggleStart() {
@@ -607,15 +574,12 @@ class Game {
   }
 
   gameOver() {
-    debugger
     let gameOverMessage = document.getElementById("gameOver");
-    // let knownFacts = document.querySelector(".known-facts").innerHTML =
     this.stoppedGame = true;
     gameOverMessage.style.display = "inline-block";
   }
 
   toggleGameScreen() {
-    debugger
     if (this.stoppedGame === true) {
       let gameOverMessage = document.getElementById("gameOver");
       gameOverMessage.style.display = "none";
@@ -629,8 +593,8 @@ class Game {
   drawBlossoms(ctx) {
     let i = 0;
     return () => {
-      if (i === 10) clearInterval(this.interval);
-      if (i === 10) {
+      if (i === 50) clearInterval(this.interval);
+      if (i === 50) {
         this.gameOver();
       }
       this.findVisibleWords();
@@ -651,29 +615,24 @@ class Game {
   }
 
   findVisibleWords() {
-
     this.blossoms.forEach(blossom => {
       if (blossom.x > 0 && blossom.x < 980) {
         this.visibleBlossoms.push(blossom);
         if (this.visibleBlossoms.length > 7) {
           this.visibleBlossoms.splice(0,1);
         }
-        // console.log("visibleBlossoms:" + this.visibleBlossoms.length);
       }
     });
     this.visibleBlossoms.forEach(blossom => {
-      // console.log(visibleBlossoms: this.visibleBlossoms)
       if (!this.visibleWords.includes(blossom.wordValue)) {
         if (this.visibleWords.length > 2) {
           this.visibleWords.splice(0, 1);
         }
         this.visibleWords.push(blossom.wordValue);
 
-        // console.log("visibleWords:" + this.visibleWords);
         Word.prototype.renderWordChoice(this.visibleWords);
       }
     });
-    // setInterval(this.findVisibleWords, 3000);
   }
   //
   // collisionHandler(blossom, nextBlossom) {
@@ -729,7 +688,8 @@ class Game {
             if (idx !== -1) {
               this.visibleBlossoms.splice(idx, 1);
             }
-            console.log(this.blossoms.length)
+            // this.visibleBlossoms.push(this.blossoms[idx+3].wordV)
+            Word.prototype.renderWordChoice("Decimated");
             blossom.explodeBlossom(this.ctx3);
           } else {
             this.player.removeGems();

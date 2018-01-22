@@ -187,7 +187,7 @@ class Blossom {
   }
 
   // pauseGame(ctx) {
-  //   debugger
+  //
   //   this.cancelGame = true;
   //   Blossom.prototype.draw;
   // }
@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const game = new Game(ctx, ctx2, ctx3, ctxWords);
 
-  debugger
+
   game.beginBackground(ctx2);
   game.controlGame();
   // game.start(ctx, ctx3);

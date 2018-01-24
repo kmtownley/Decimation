@@ -186,7 +186,7 @@ class Blossom {
     this.cancelGame = false;
     this.blossom = new Image();
     this.blossom.src = './assets/images/whole_blossom.png';
-    this.explosion = new Explosion(this.ctx3);
+    this.explosion = new Explosion(this.ctx3, this.x, this.y);
     this.explosion.src = "./assets/images/explosion_sprite.png";
     this.alreadyExploded = false;
 
@@ -391,10 +391,6 @@ document.addEventListener("DOMContentLoaded", () => {
   game.controlGame();   /// start the loop (or use rAF here too)
 
 
-  // let pauseButton = document.getElementById("pause");
-  // pauseButton.addEventListener("click", () =>  game.togglePause);
-
-  // window.Blossom = Blossom;
 
 });
 
@@ -424,7 +420,7 @@ class Explosion {
   }
 
 
-  explodeBlossom(ctx3, blossomX, blossomY, length, width, ctx) {
+  explodeBlossom(ctx3, blossomX, blossomY, length, width) {
     // if (this.startPosX >= 1040 && this.startPosy >= 640) {
     //   this.startPosX = 0;
     //   thi.startPosY = 0;
@@ -454,6 +450,7 @@ class Explosion {
           this.startPosX += 128;
 
           if (this.startPosX >= 1024 & this.startCount <= 4) {
+            
             this.startPosX = 0;
             this.startPosY += 128;
             this.startCount += 1;
@@ -510,7 +507,6 @@ class Game {
   constructor(ctx, ctx2, ctx3, ctxWords) {
     this.blossoms = [];
     this.visibleBlossoms = [];
-    this.cancelGame = "";
     this.start = false;
     this.startAnimation = this.startAnimation.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
@@ -537,9 +533,9 @@ class Game {
     this.initialExplode = true;
     this.alreadyStarted = false;
     this.startCount = 0;
+    this.explodingBlossoms = 0;
 
   }
-
 
   loadBlossoms() {
     if (this.start === true) {
@@ -565,7 +561,7 @@ class Game {
         this.blossoms.forEach((blossom, idx) => {
           if (blossom.blossomExploded === true) {
           this.renderExplosion(this.ctx3, blossom.x, blossom.y, 30, 70);
-          setTimeout(() => blossom.blossomExploded = false, 2400);
+          setTimeout(() => blossom.blossomExploded = false, 800);
           }
         });
       }
@@ -588,10 +584,6 @@ class Game {
       }
       this.findVisibleWords();
       requestAnimationFrame(this.startAnimation);
-
-    // } else {
-    //   return null;
-    // }
   }
 
 
@@ -612,12 +604,10 @@ class Game {
       this.visibleBlossoms.push(this.blossoms.slice(idx, idx + 1)[0]);
       idx += 1;
 
-
     }, 3000);
       setInterval(() => this.findVisibleWords, 3000);
     }
       this.startAnimation();
-    // this.startAnimation();
   }
 
   gameOver() {
@@ -644,9 +634,6 @@ class Game {
       }
       }
     });
-    // if (idxDeleted) {
-    //   this.visibleBlossoms.splice(idxDeleted, 1);
-    // }
   }
 
   createBlossoms() {
@@ -660,9 +647,6 @@ class Game {
   explodeBlossoms() {
     this.visibleBlossoms.forEach((blossom, idx) => {
       if (blossom.blossomExploded === true) {
-        // blossom.explodeBlossom(this.ctx3);
-        // console.log(blossom)
-
         if (idx !== -1) {
           this.visibleBlossoms.splice(idx, 1);
         }
@@ -681,11 +665,6 @@ class Game {
   findVisibleWords() {
     this.blossoms.forEach(blossom => {
       if (blossom.x > 0 && blossom.x < 980) {
-        // this.visibleBlossoms.push(blossom);
-
-        // if (this.visibleBlossoms.length > 7) {
-        //   this.visibleBlossoms.splice(0,1);
-        // }
       }
     });
     this.visibleBlossoms.forEach(blossom => {
@@ -710,7 +689,9 @@ class Game {
   // }
 
   renderExplosion(ctx3, xPos, yPos, sizeX, sizeY) {
-    this.explosion.explodeBlossom(ctx3, xPos, yPos, sizeX, sizeY);
+    this.blossoms.forEach(blossom => {
+       blossom.explosion.explodeBlossom(ctx3, xPos, yPos, sizeX, sizeY);
+    });
     // setTimeout(() => this.exploding = false, 2000);
   }
 
@@ -726,17 +707,21 @@ class Game {
             Word.prototype.renderWordChoice("Decimated");
             // blossom.explodeBlossom(this.ctx3);
 
-            // this.willExplode = true;
+
 
             blossom.blossomExploded = true;
-            this.explosion.startPosX = 0;
-            this.explosion.startPosY = 0;
-            this.explosion.startCount = 0;
+            this.explodingBlossoms += 1;
+            blossom.explosion.startPosX = 0;
+            blossom.explosion.startPosY = 0;
+            blossom.explosion.startCount = 0;
             this.exploding = true;
-            setTimeout(() => this.exploding = false, 3000);
+            setTimeout(() => {
+              this.explodingBlossoms -= 1;
+              if (this.explodingBlossoms === 0) {
+                this.exploding = false;
+              }
+            }, 1200);
 
-            // this.explodeBlossoms();
-            // this.renderExplosion(this.ctx3, blossom.x, blossom.y, 30, 70);
 
           } else {
             this.player.removeGems();

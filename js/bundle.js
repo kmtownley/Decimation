@@ -188,6 +188,7 @@ class Blossom {
     this.blossom.src = './assets/images/whole_blossom.png';
     this.explosion = new Explosion(this.ctx3);
     this.explosion.src = "./assets/images/explosion_sprite.png";
+    this.alreadyExploded = false;
 
 
   }
@@ -205,7 +206,7 @@ class Blossom {
     let dy = 0.8;
 
     // if (this.blossomExploded === true) {
-    //   debugger
+    //
     //   console.log("got in")
     //   this.blossom = ctx.createImageData(128, 128);
     //     for (let i = this.blossom.data.length; --i >= 0; )
@@ -286,7 +287,7 @@ class Blossom {
    }
 
    // explodeBlossom() {
-   //   debugger
+   //
    //   // let explosion = new Explosion(this.ctx3);
    //   this.explosion.explodeBlossom(this.x, this.y, 30, 70);
    //   setTimeout( () => this.explosion.exploded = false, 2000);
@@ -446,7 +447,7 @@ class Explosion {
           ctx3.drawImage(this.explodeImage, this.startPosX, this.startPosY, 128, 128, blossomX / 9.2, blossomY/ 5.9, length, width);
           // this.ctx3.fillStyle = 'green';
           // this.ctx3.fillRect(0, 0, 128, 128)
-          debugger
+
           this.startPosX += 128;
 
           if (this.startPosX >= 1024 & this.startCount <= 4) {
@@ -507,7 +508,7 @@ class Game {
     this.blossoms = [];
     this.visibleBlossoms = [];
     this.cancelGame = "";
-    this.start = null;
+    this.start = false;
     this.startAnimation = this.startAnimation.bind(this);
     this.createBlossoms = this.createBlossoms.bind(this);
     this.findVisibleWords = this.findVisibleWords.bind(this);
@@ -564,11 +565,14 @@ class Game {
       this.renderExplosion(this.ctx3, 0, -10, 120, 130);
     }
     if (this.exploding === true) {
-      debugger
-      this.blossoms.forEach(blossom => {
+
+      this.blossoms.forEach((blossom, idx) => {
         if (blossom.blossomExploded === true) {
+          debugger
         this.renderExplosion(this.ctx3, blossom.x, blossom.y, 30, 70);
+        setTimeout(() => blossom.blossomExploded = false, 2000);
         }
+
 
       });
     }
@@ -611,7 +615,7 @@ class Game {
       let idx = 0;
       setInterval(() => {
 
-        debugger
+
       this.visibleBlossoms.push(this.blossoms.slice(idx, idx + 1)[0]);
       idx += 1;
     }, 3000);
@@ -725,15 +729,12 @@ class Game {
           if (Word.prototype.isMatch(blossom.wordValue)) {
             this.correctChoices += 1;
             this.player.addGems();
-            // blossom.blossomExploded = true;
-            // this.exploding = true;
-            // if (idx !== -1) {
-            //   this.visibleBlossoms.splice(idx, 1);
-            // }
+
             Word.prototype.renderWordChoice("Decimated");
             // blossom.explodeBlossom(this.ctx3);
 
             // this.willExplode = true;
+
             blossom.blossomExploded = true;
             this.explosion.startPosX = 0;
             this.explosion.startPosY = 0;

@@ -383,8 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   game.beginBackground(ctx2);
   game.controlGame();
-  game.toggleStart();
-  game.loadBlossoms();
   // game.start(ctx, ctx3);
 
 
@@ -545,6 +543,7 @@ class Game {
   }
 
   loadBlossoms() {
+    debugger
     if (this.start === true) {
       for (let i = 0; i <= Game.NUM_BLOSSOMS; ++i) {
         this.blossoms.push(
@@ -603,7 +602,8 @@ class Game {
 
   controlGame() {
     let startButton = document.getElementById("start");
-    startButton.addEventListener("click", this.startAnimation, false);
+    startButton.addEventListener("click", () => {
+      this.toggleStart()}, false);
     let stopButton = document.getElementById("stop").addEventListener("click",   this.gameOver, false);
   }
 
@@ -613,6 +613,7 @@ class Game {
       this.start = true;
       this.willExplode = true;
       let idx = 0;
+      this.loadBlossoms();
       setInterval(() => {
 
 
@@ -625,6 +626,8 @@ class Game {
     } else if (this.start) {
       this.start = false;
     }
+    this.startAnimation();
+
   }
 
   gameOver() {

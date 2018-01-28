@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -95,7 +95,7 @@ WORDS = {
   "Eighty-One Thousandths": 0.81,
   "Eighteen Hundredths": 0.18,
   "Thirteen Thousandths": 0.013,
-  "Eighty-One Thousandths": 0.081,
+  "Eighty-Five Thousandths": 0.085,
   "Ninety-Nine Thousandths": 0.099,
   "Three Hundred and Fifteen Thousandths": 0.315
 };
@@ -108,8 +108,6 @@ class Word {
     this.decimalValue = this.createDecimal(this.wordValue);
     this.match = null;
     this.display = false;
-
-
   }
 
   createWord() {
@@ -118,16 +116,9 @@ class Word {
     let rnd = Math.floor(Math.random()*length);
     let key = keys[rnd];
     return key;
-    // console.log(WORDS[key]);
-    // return WORDS[key];
   }
 
   createDecimal(key) {
-
-    // let keys = Object.keys(WORDS);
-    // let length = keys.length;
-    // let rnd = Math.floor(Math.random()*length);
-    // let key = keys[rnd];
     return WORDS[key];
   }
 
@@ -144,15 +135,11 @@ class Word {
       let word = wordArray[Math.floor(Math.random() * wordArray.length)];
         document.querySelector(".words").innerHTML = word;
         DISPLAYED_WORD = word;
-      // });
     }
   }
 
-
-
   isMatch(wordVal) {
     return (wordVal === DISPLAYED_WORD ? true : false);
-
   }
 }
 
@@ -166,7 +153,7 @@ module.exports = Word;
 // BLOSSOM = new Image();
 // BLOSSOM.src = "./assets/images/whole_blossom.png";
 const Word = __webpack_require__(0);
-const Explosion = __webpack_require__(3);
+const Explosion = __webpack_require__(2);
 
 
 class Blossom {
@@ -321,82 +308,6 @@ module.exports = Blossom;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Blossom = __webpack_require__(1);
-const Game = __webpack_require__(4);
-const Words = __webpack_require__(0);
-
-document.addEventListener("DOMContentLoaded", () => {
-  let canvasEl = document.getElementById("myCanvas");
-  canvasEl.width = 1000;
-  canvasEl.height = 500;
-  canvasLeft = canvasEl.offsetLeft;
-  canvasTop = canvasEl.offsetTop;
-
-  let ctx = canvasEl.getContext("2d");
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
-
-  let canvasWords = document.getElementById("canvasWords");
-  canvasWords.width = 80;
-  canvasWords.height = 80;
-  let ctxWords = document.getElementById("canvasWords");
-
-  let clickyEl = document.querySelector(".clicky");
-  clickyEl.addEventListener("click", (e) => {
-    let x = e.pageX - canvasLeft;
-    let y = e.pageY - canvasTop;
-    game.receiveMouseXY(x, y);
-  });
-
-  let modal = document.getElementById('myModal');
-  let btn = document.getElementById("myBtn");
-  let span = document.getElementsByClassName("close")[0];
-  btn.onclick = function() {
-      modal.style.display = "block";
-  };
-
-  span.onclick = function() {
-      modal.style.display = "none";
-  };
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
-      }
-  };
-
-  let backgroundEl = document.getElementById("canvasBackground");
-  backgroundEl.height = 100;
-  backgroundEl.width = 300;
-
-  let ctx2 = canvasEl.getContext("2d");
-
-  let explosionEl = document.getElementById("canvasExplosion");
-  explosionEl.height = 128;
-  explosionEl.width = 128;
-
-  let ctx3 = explosionEl.getContext("2d");
-
-  const game = new Game(ctx, ctx2, ctx3, ctxWords);
-
-
-  document.addEventListener("visibilitychange", () => {
-    game.gameOver();
-  });
-
-
-
-  game.beginBackground(ctx2);
-  game.controlGame();   /// start the loop (or use rAF here too)
-
-
-
-});
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 class Explosion {
@@ -494,6 +405,82 @@ module.exports = Explosion;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Blossom = __webpack_require__(1);
+const Game = __webpack_require__(4);
+const Words = __webpack_require__(0);
+
+document.addEventListener("DOMContentLoaded", () => {
+  let canvasEl = document.getElementById("myCanvas");
+  canvasEl.width = 1000;
+  canvasEl.height = 500;
+  canvasLeft = canvasEl.offsetLeft;
+  canvasTop = canvasEl.offsetTop;
+
+  let ctx = canvasEl.getContext("2d");
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
+
+  let canvasWords = document.getElementById("canvasWords");
+  canvasWords.width = 80;
+  canvasWords.height = 80;
+  let ctxWords = document.getElementById("canvasWords");
+
+  let clickyEl = document.querySelector(".clicky");
+  clickyEl.addEventListener("click", (e) => {
+    let x = e.pageX - canvasLeft;
+    let y = e.pageY - canvasTop;
+    game.receiveMouseXY(x, y);
+  });
+
+  let modal = document.getElementById('myModal');
+  let btn = document.getElementById("myBtn");
+  let span = document.getElementsByClassName("close")[0];
+  btn.onclick = function() {
+      modal.style.display = "block";
+  };
+
+  span.onclick = function() {
+      modal.style.display = "none";
+  };
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  };
+
+  let backgroundEl = document.getElementById("canvasBackground");
+  backgroundEl.height = 100;
+  backgroundEl.width = 300;
+
+  let ctx2 = canvasEl.getContext("2d");
+
+  let explosionEl = document.getElementById("canvasExplosion");
+  explosionEl.height = 128;
+  explosionEl.width = 128;
+
+  let ctx3 = explosionEl.getContext("2d");
+
+  const game = new Game(ctx, ctx2, ctx3, ctxWords);
+
+
+  document.addEventListener("visibilitychange", () => {
+    game.gameOver();
+  });
+
+
+
+  game.beginBackground(ctx2);
+  game.controlGame();   /// start the loop (or use rAF here too)
+
+
+
+});
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -501,7 +488,7 @@ const Blossom = __webpack_require__(1);
 const Background = __webpack_require__(5);
 const Word = __webpack_require__(0);
 const Player = __webpack_require__(6);
-const Explosion = __webpack_require__(3);
+const Explosion = __webpack_require__(2);
 
 class Game {
   constructor(ctx, ctx2, ctx3, ctxWords) {

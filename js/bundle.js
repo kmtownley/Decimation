@@ -527,6 +527,10 @@ class Game {
     this.pausedGame = document.getElementById("pausedGame");
     this.gameOver = this.gameOver.bind(this);
     this.gameStopped = false;
+    this.audio = document.getElementById("player");
+    this.mute = document.getElementById("mute");
+    this.explosionSound = document.getElementById("explosion");
+    this.errorSound = document.getElementById("wrong")
   }
 
   loadBlossoms() {
@@ -587,8 +591,17 @@ class Game {
       this.toggleStart();}, false);
     let stopButton = document.getElementById("stop").addEventListener("click",   this.gameOver, false);
     let pauseButton = document.getElementById("pause"); pauseButton.addEventListener("click", () => {this.togglePause();}, false);
+    this.mute.addEventListener("click", () => {this.toggleMute();});
   }
 
+  toggleMute() {
+    if (this.audio.paused) {
+      this.audio.volume = 0.4
+      this.audio.play();
+    } else {
+      this.audio.pause();
+    }
+  }
   toggleStart() {
     if (!this.start) {
       this.start = true;
@@ -619,6 +632,8 @@ class Game {
 
   gameOver() {
     this.pausedGame.style.display = "none";
+    // let wordContainer = document.querySelector("words").innerHTML = "Well Done";
+    // wordContainer.style.display = "inline-block";
     let gameOverMessage = document.getElementById("gameOver");
     this.gameStopped = true;
     gameOverMessage.style.display = "inline-block";
@@ -704,6 +719,7 @@ class Game {
             blossom.explosion.startPosY = 0;
             blossom.explosion.startCount = 0;
             this.exploding = true;
+            this.explosionSound.play();
             setTimeout(() => {
               this.explodingBlossoms -= 1;
               if (this.explodingBlossoms === 0) {
@@ -713,6 +729,7 @@ class Game {
 
           } else {
             this.player.removeGems();
+            this.errorSound.play();
           }
         }
       });

@@ -308,9 +308,9 @@ main {
   position: absolute;
   display: flex;
   justify-content: space-between;
-  width: 236px;
+  width: 295px;
   height: 40px;
-  margin: -30px 70px;
+  margin: -30px 42px;
   z-index: 1010
 }
 
@@ -324,4 +324,19 @@ main {
   height: 44px;
   width: 64px;
   color: #800000;
+  outline: none;
+  cursor: pointer;
+}
+
+
+
+/* audio {
+  position: relative;
+  z-index: 1001
+} */
+
+.mute-button {
+  position: relative;
+  z-index: 1020;
+  background-color: red;
 }

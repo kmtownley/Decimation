@@ -221,7 +221,7 @@ main {
   width: 958px;
   height: 458px;
   text-align: center;
-  line-height: 160px;
+  line-height: 131px;
   /* background-image: url(../assets/images/game_over.gif);
   background-size: 50px 50px; */
   font-family: 'Varela Round', sans-serif;
@@ -308,10 +308,10 @@ main {
   position: absolute;
   display: flex;
   justify-content: space-between;
-  width: 231px;
+  width: 236px;
   height: 40px;
-  margin: -151px 72px;
-  z-index: 1010;
+  margin: -30px 70px;
+  z-index: 1010
 }
 
 .controls .fa {

@@ -48,9 +48,6 @@
       </div>
 
       <div class="controls">
-        <button id="stop">
-            <i class="fa fa-stop-circle fa-3x" aria-hidden="true"></i>
-        </button>
         <button onClick="window.location.reload()">
           <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i>
         </button>
@@ -59,6 +56,9 @@
         </button>
         <button id="pause">
           <i class="fa fa-pause fa-3x" aria-hidden="true"></i>
+        </button>
+        <button id="stop">
+            <i class="fa fa-stop-circle fa-3x" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -69,7 +69,9 @@
       <canvas id="canvasWords"></canvas>
       <canvas id="canvasExplosion"></canvas>
       <canvas class="clicky"></canvas>
-      <span id="gameOver">Game Over! </br> To decimate again press the game button and play!
+      <span id="gameOver">Game Over! </br> To decimate again press the
+        <i class="fa fa-gamepad fa-2x" aria-hidden="true"></i> button and then
+        <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i> to begin!
       </span>
       <span id="pausedGame">
         <h3> <strong>Game Paused!</strong> Press the pause button to return to your game </h3>

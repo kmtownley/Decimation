@@ -526,7 +526,7 @@ class Game {
     this.blossomIdx = 0 ;
     this.pausedGame = document.getElementById("pausedGame");
     this.gameOver = this.gameOver.bind(this);
-
+    this.gameStopped = false;
   }
 
   loadBlossoms() {
@@ -607,12 +607,11 @@ class Game {
 
   togglePause() {
     this.isPaused = !this.isPaused;
-    // let pausedGame = document.getElementById("pausedGame");
-    if (this.isPaused) {
+    if (this.isPaused && !this.gameStopped) {
       clearInterval(this.blossomStack);
       this.start = false;
       this.pausedGame.style.display = "inline-block";
-    } else {
+    } else if (!this.gameStopped){
       this.toggleStart();
       this.pausedGame.style.display = "none";
     }
@@ -621,7 +620,7 @@ class Game {
   gameOver() {
     this.pausedGame.style.display = "none";
     let gameOverMessage = document.getElementById("gameOver");
-    this.stoppedGame = true;
+    this.gameStopped = true;
     gameOverMessage.style.display = "inline-block";
   }
 
@@ -659,8 +658,6 @@ class Game {
         if (idx !== -1) {
           this.visibleBlossoms.splice(idx, 1);
         }
-
-        // blossom.blossomExploded === true;
       }
     });
   }
@@ -682,26 +679,14 @@ class Game {
           this.visibleWords.splice(0, 1);
         }
         this.visibleWords.push(blossom.wordValue);
-
-        // Word.prototype.renderWordChoice(this.visibleWords);
       }
     });
   }
-  //
-  // collisionHandler(blossom, nextBlossom) {
-  //   this.blossoms.forEach((blossom, idx) => {
-  //     let nextBlossom = this.blossoms[idx + 1];
-  //     if (blossom.x > nextBlossom.x) {
-  //       blossom.x -= 10;
-  //     }
-  //   });
-  // }
 
   renderExplosion(ctx3, xPos, yPos, sizeX, sizeY) {
     this.blossoms.forEach(blossom => {
        blossom.explosion.explodeBlossom(ctx3, xPos, yPos, sizeX, sizeY);
     });
-    // setTimeout(() => this.exploding = false, 2000);
   }
 
   receiveMouseXY(x, y) {
@@ -712,12 +697,7 @@ class Game {
           if (Word.prototype.isMatch(blossom.wordValue)) {
             this.correctChoices += 1;
             this.player.addGems();
-
             Word.prototype.renderWordChoice("Decimated");
-            // blossom.explodeBlossom(this.ctx3);
-
-
-
             blossom.blossomExploded = true;
             this.explodingBlossoms += 1;
             blossom.explosion.startPosX = 0;
@@ -730,7 +710,6 @@ class Game {
                 this.exploding = false;
               }
             }, 1200);
-
 
           } else {
             this.player.removeGems();

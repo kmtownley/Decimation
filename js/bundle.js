@@ -530,7 +530,7 @@ class Game {
     this.audio = document.getElementById("player");
     this.mute = document.getElementById("mute");
     this.explosionSound = document.getElementById("explosion");
-    this.errorSound = document.getElementById("wrong")
+    this.errorSound = document.getElementById("wrong");
   }
 
   loadBlossoms() {
@@ -551,6 +551,7 @@ class Game {
     if (!this.isPaused) {
       this.ctx3.clearRect(0, 0, 128, 128);
       if (this.initialExplode === true) {
+        this.explosionSound.play();
         this.renderExplosion(this.ctx3, 0, -10, 120, 130);
       }
       if (this.exploding === true) {

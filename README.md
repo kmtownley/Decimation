@@ -7,7 +7,11 @@
 
 Decimation will allows users to:
   +Start, Pause, Stop and restart a game
+<<<<<<< HEAD
   +Gain points by exploding blossoms with matching decimal values.
+=======
+  +Gain seeds by slicing open the correct fruits
+>>>>>>> 7b53cc3b9c67016d879dadf952b530c1d695ff92
   +Earn a spot on the leader board through seed accumulation!!
   +Level up to increase both the difficult of the numbers and the speed of the fruit
 

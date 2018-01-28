@@ -521,6 +521,11 @@ class Game {
     this.alreadyStarted = false;
     this.startCount = 0;
     this.explodingBlossoms = 0;
+    this.isPaused = false;
+    this.blossomStack;
+    this.blossomIdx = 0 ;
+    this.pausedGame = document.getElementById("pausedGame");
+    this.gameOver = this.gameOver.bind(this);
 
   }
 
@@ -539,7 +544,7 @@ class Game {
   }
 
   startAnimation() {
-    // if (this.startCount === 1) {
+    if (!this.isPaused) {
       this.ctx3.clearRect(0, 0, 128, 128);
       if (this.initialExplode === true) {
         this.renderExplosion(this.ctx3, 0, -10, 120, 130);
@@ -554,6 +559,7 @@ class Game {
       }
       setTimeout(() => this.initialExplode = false, 2000);
       this.explodeBlossoms();
+
       let now = Date.now();
       this.delta = now - this.then;
       if (this.visibleBlossoms && this.start === true) {
@@ -571,25 +577,27 @@ class Game {
       }
       this.findVisibleWords();
       requestAnimationFrame(this.startAnimation);
+    }
   }
 
 
   controlGame() {
     let startButton = document.getElementById("start");
     startButton.addEventListener("click", () => {
-      this.toggleStart()}, false);
+      this.toggleStart();}, false);
     let stopButton = document.getElementById("stop").addEventListener("click",   this.gameOver, false);
+    let pauseButton = document.getElementById("pause"); pauseButton.addEventListener("click", () => {this.togglePause();}, false);
   }
 
   toggleStart() {
     if (!this.start) {
       this.start = true;
+      this.isPaused = false;
       this.willExplode = true;
-      let idx = 0;
       this.loadBlossoms();
-      setInterval(() => {
-      this.visibleBlossoms.push(this.blossoms.slice(idx, idx + 1)[0]);
-      idx += 1;
+      this.blossomStack = setInterval(() => {
+      this.visibleBlossoms.push(this.blossoms.slice(this.blossomIdx, this.blossomIdx + 1)[0]);
+      this.blossomIdx += 1;
 
     }, 3000);
       setInterval(() => this.findVisibleWords, 3000);
@@ -597,7 +605,21 @@ class Game {
       this.startAnimation();
   }
 
+  togglePause() {
+    this.isPaused = !this.isPaused;
+    // let pausedGame = document.getElementById("pausedGame");
+    if (this.isPaused) {
+      clearInterval(this.blossomStack);
+      this.start = false;
+      this.pausedGame.style.display = "inline-block";
+    } else {
+      this.toggleStart();
+      this.pausedGame.style.display = "none";
+    }
+  }
+
   gameOver() {
+    this.pausedGame.style.display = "none";
     let gameOverMessage = document.getElementById("gameOver");
     this.stoppedGame = true;
     gameOverMessage.style.display = "inline-block";
@@ -644,7 +666,7 @@ class Game {
   }
 
   renderBackground(ctx2) {
-    if (!this.paused) {
+    if (!this.isPaused) {
     new Background(0, 500).scrollImage(ctx2);
     }
   }

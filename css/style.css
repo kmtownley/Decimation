@@ -226,6 +226,30 @@ main {
   font-family: 'Varela Round', sans-serif;
 }
 
+#pausedGame {
+  display: none;
+  width: 1000px;
+  height: 500px;
+  margin-top: 18px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 1000;
+  color: #ffffff;
+  background-image: url("../assets/images/falling_blossoms.gif");
+  background-size: cover;
+}
+
+#pausedGame h3 {
+  font-family: 'Varela Round', sans-serif;
+  background-color: #880000;
+  width: 55%;
+  text-align: center;
+  margin: 400px 50px;
+  height: 16px;
+  padding: 15px;
+  border-radius: 14px;
+  line-height: 1;
+}
 
 
 #myBtn {

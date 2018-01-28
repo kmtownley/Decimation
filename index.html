@@ -54,8 +54,11 @@
         <button onClick="window.location.reload()">
           <i class="fa fa-gamepad fa-3x" aria-hidden="true"></i>
         </button>
-        <button id="start" onCLick="this.disabled=true;">
-            <i class="fa fa-play-circle fa-3x" aria-hidden="true"></i>
+        <button id="start" onClick="this.disabled=true;">
+          <i class="fa fa-play-circle fa-3x" aria-hidden="true"></i>
+        </button>
+        <button id="pause">
+          <i class="fa fa-pause fa-3x" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -67,6 +70,9 @@
       <canvas id="canvasExplosion"></canvas>
       <canvas class="clicky"></canvas>
       <span id="gameOver">Game Over! </br> To decimate again press the game button and play!
+      </span>
+      <span id="pausedGame">
+        <h3> <strong>Game Paused!</strong> Press the pause button to return to your game </h3>
       </span>
     </main>
   </body>

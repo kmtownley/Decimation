@@ -16,17 +16,17 @@ Decimation will allows users to:
 ![alt text](assets/images/wireframe.png)
 
 ### Composition and Technology
-  The app will be created using the subsequent technologies:
-    * webpack to bundle js files
-    * JavaScript for game logic
-    * Canvas, CSS3, & HTML5 for rendering
+The app will be created using the subsequent technologies:
+  * webpack to bundle js files
+  * JavaScript for game logic
+  * Canvas, CSS3, & HTML5 for rendering
 
-  The game will rely upon four scripts:
-    * game.js: will handle the logic of the game board and will handle the updating necessary elements, which will cause rerenders.  
-    * blossom.js: will manage the logic of the blossoms being displayed on the board. Each blossom object will hold a decimal value and a unqie path.
-    * player.js: responsible for the player's scores.
-    * word.js: will be responsible for displaying corresponding decimal values that match visible blossoms on the screen in a random fashion.
-    * explosion.js will cause explosions to render at corresponding blossom coordinates.
+The game will rely upon four scripts:
+  * game.js: will handle the logic of the game board and will handle the updating necessary elements, which will cause rerenders.  
+  * blossom.js: will manage the logic of the blossoms being displayed on the board. Each blossom object will hold a decimal value and a unqie path.
+  * player.js: responsible for the player's scores.
+  * word.js: will be responsible for displaying corresponding decimal values that match visible blossoms on the screen in a random fashion.
+  * explosion.js will cause explosions to render at corresponding blossom coordinates.
 
 ### Implementation Details
 

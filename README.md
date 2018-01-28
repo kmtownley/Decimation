@@ -6,10 +6,10 @@
 ### Functionality & MVP
 
 Decimation will allows users to:
-  -Start, Pause, Stop and restart a game
-  -Gain points by exploding blossoms with matching decimal values.
-  -Earn a spot on the leader board through seed accumulation!!
-  -Level up to increase both the difficult of the numbers and the speed of the fruit
+  +Start, Pause, Stop and restart a game
+  +Gain points by exploding blossoms with matching decimal values.
+  +Earn a spot on the leader board through seed accumulation!!
+  +Level up to increase both the difficult of the numbers and the speed of the fruit
 
 ### Wireframes
   Decimation will be a single page app with controls that allow users to Start, Stop, Pause and Begin a new game. Additionally, the users score will be displayed and updated in real time. Finally, there will be an introductory modal explaining the game. The page will also have live links to both my Linked in account and Github repo.

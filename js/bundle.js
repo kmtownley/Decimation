@@ -85,7 +85,7 @@ WORDS = {
   "Eleven Hundredths": 0.11,
   "Sixteen Hundredths": 0.16,
   "Seventeen Hundredths": 0.017,
-  "One an One Tenth": 1.1,
+  "One and One Tenth": 1.1,
   "Three and Four Tenths": 3.4,
   "Zero and Three Hundredths": 0.03,
   "One Thousandth": 0.001,
@@ -597,7 +597,7 @@ class Game {
 
   toggleMute() {
     if (this.audio.paused) {
-      this.audio.volume = 0.4
+      this.audio.volume = 0.4;
       this.audio.play();
     } else {
       this.audio.pause();

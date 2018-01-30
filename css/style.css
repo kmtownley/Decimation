@@ -227,6 +227,37 @@ main {
   font-family: 'Varela Round', sans-serif;
 }
 
+#gameComplete {
+  display: none;
+  position: absolute;
+  /* width: 1000px;
+  height: 500px; */
+  margin-top: 18px;
+  border-radius: 44px;
+  margin-left: 396px;
+  z-index: 10001;
+  color: #ffffff;
+  font-size: 27px;
+  background-color: #f0a0a0;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 958px;
+  height: 458px;
+  text-align: center;
+  line-height: 131px;
+  /* background-image: url(../assets/images/game_over.gif);
+  background-size: 50px 50px; */
+  font-family: 'Varela Round', sans-serif;
+}
+
+#gameComplete img {
+  width: 33%;
+    height: 39%;
+    margin: -7px;
+    padding: 0;
+    border-radius: 3px;
+}
+
 #pausedGame {
   display: none;
   position: absolute;
@@ -254,7 +285,7 @@ main {
 }
 
 
-#myBtn {
+.modal-buttons {
   height: 47%;
   border-radius: 3px;
   width: 166px;
@@ -265,6 +296,10 @@ main {
   font-size: medium;
   background-color: black;
   margin-left: 107px;
+  z-index: 1020;
+  cursor: pointer;
+  position: relative;
+  outline: none;
 }
 
 .modal {
@@ -280,6 +315,19 @@ main {
     background-color: rgba(0,0,0,0.4);
 }
 
+.modal2 {
+  display: none;
+  position: fixed;
+  z-index: 1020;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
 
 .modal-content {
     background-color: #ffffff;
@@ -287,6 +335,19 @@ main {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    font-family: 'Varela Round', sans-serif;
+}
+
+.modal-content2 {
+    background-image: url(../assets/images/leaderboard.png);
+    background-size: cover;
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: 70%;
+    border-radius: 3px;
     font-family: 'Varela Round', sans-serif;
 }
 
@@ -299,6 +360,20 @@ main {
 
 .close:hover,
 .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.close2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close2:hover,
+.close2:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;

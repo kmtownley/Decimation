@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
     <script src="https://use.fontawesome.com/19c90ece88.js"></script>
@@ -12,9 +13,8 @@
   <script src="lib/board.js"></script>
   <body>
     <nav>
-      <button id="myBtn">How To Play</button>
+      <button class="modal-buttons" id="myBtn">How To Play</button>
       <div id="myModal" class="modal">
-        <!-- Modal content -->
         <div class="modal-content">
           <span class="close">&times;</span>
           <p id="how-to-play">How To Decimate:
@@ -27,6 +27,15 @@
           </p>
         </div>
       </div>
+
+      <button class="modal-buttons" id="myBtn2">Leaderboard</button>
+      <div id="myModal2" class="modal2">
+        <div class="modal-content2">
+          <span class="close2">&times;</span>
+          <p id="leaderboard"></p>
+        </div>
+      </div>
+
 
       <div class="title">Decimation</div>
       <div class="link-container">
@@ -83,7 +92,15 @@
       <span id="pausedGame" class="w3-animate-fading">
         <h3> <strong>Game Paused!</strong> Press the pause button to return to your game </h3>
       </span>
+      <span id="gameComplete"><strong>Congratulations! You've survived your first decimation.</strong></br> To decimate again press the
+        <i class="fa fa-gamepad fa-2x" aria-hidden="true"></i> button and then
+        <i class="fa fa-play-circle fa-2x" aria-hidden="true"></i> to begin!
+        <img src='assets/images/happy_panda.gif' />
+        <img src='assets/images/happy_panda.gif'/>
+        <img src='assets/images/happy_panda.gif'/>
+      </span>
     </main>
+
   </body>
   <footer></footer>
 </html>

@@ -80,6 +80,7 @@ footer {
   height: 230px;
   width: 100%;
   margin-top: -120px;
+  z-index: -10;
 }
 
 nav {
@@ -235,16 +236,18 @@ main {
   margin-top: 18px;
   border-radius: 44px;
   margin-left: 396px;
-  z-index: 10001;
+  z-index: 1001;
   color: #ffffff;
   font-size: 27px;
-  background-color: #f0a0a0;
+  background-image: url(../assets/images/winning_bg.png);
+  background-size: cover;
   padding: 20px;
   border: 1px solid #888;
   width: 958px;
   height: 458px;
   text-align: center;
   line-height: 131px;
+  font-size: 31px;
   /* background-image: url(../assets/images/game_over.gif);
   background-size: 50px 50px; */
   font-family: 'Varela Round', sans-serif;
@@ -284,6 +287,10 @@ main {
   line-height: 1;
 }
 
+.buttons-container {
+  display: flex;
+
+}
 
 .modal-buttons {
   height: 47%;
@@ -295,11 +302,15 @@ main {
   font-family: 'Varela Round', sans-serif;
   font-size: medium;
   background-color: black;
-  margin-left: 107px;
+  margin-left: 22px;
   z-index: 1020;
   cursor: pointer;
   position: relative;
   outline: none;
+}
+
+.nav:nth-child(2) {
+  margin-left: 2px;
 }
 
 .modal {
@@ -343,12 +354,24 @@ main {
     background-size: cover;
     background-color: #ffffff;
     margin: 10% auto;
-    padding: 20px;
+    padding: 30px;
     border: 1px solid #888;
     width: 80%;
     height: 70%;
     border-radius: 3px;
     font-family: 'Varela Round', sans-serif;
+}
+
+.modal-content2 ol {
+  font-size: 24px;
+  list-style-type: upper-roman;
+  line-height: 33px;
+  color: #e84603;
+  margin-top: -31px;
+}
+
+.scores {
+  font-size: 24px;
 }
 
 .close {

@@ -360,6 +360,7 @@ main {
     height: 70%;
     border-radius: 3px;
     font-family: 'Varela Round', sans-serif;
+    overflow: hidden;
 }
 
 .modal-content2 ol {

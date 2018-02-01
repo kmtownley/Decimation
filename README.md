@@ -1,5 +1,5 @@
 # Decimation
-
+### [Live Version](https://kmtownley.github.io/Decimation/)
 ### About
   Decimals...Blossoms...what more could you ask for in a game. Tapping into the gamification trend in education, Decimation is a one player game that not only tests your knowledge of decimal places but also your hand-eye coordination. A decimal value will appear in written notation at the top of the playing field, and depending on the level of the game, blossoms will float across the field with random decimal values. By clicking the correct blossom you earn points and knowledge.  
 
